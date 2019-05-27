@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  postgres-interview:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "Postgres2019!"
+      POSTGRES_USER: postgres
+      PGDATA : /var/lib/postgresql/data
+    ports:
+      - "15432:5432"
+    networks:
+      - postgres-interview-network
+    volumes:
+      -  db-interview-data:/var/lib/postgresql/data
+  postgres-user:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "Postgres2019!"
+      POSTGRES_USER: postgres
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      - "15433:5432"
+    networks:
+      - postgres-interview-network
+    volumes:
+      - db-user-data:/var/lib/postgresql/data
+      
+  pgadmin-interview:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "joni.oliveira89@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "PgAdmin2019!"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres-interview
+      - postgres-user
+    networks:
+      - postgres-interview-network
+
+networks: 
+  postgres-interview-network:
+    driver: bridge
+
+volumes:
+  db-user-data:
+    driver: local
+  db-interview-data:
+    driver: local
