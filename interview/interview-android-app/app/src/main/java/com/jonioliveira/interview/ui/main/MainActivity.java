@@ -23,9 +23,10 @@ import com.jonioliveira.interview.databinding.ActivityMainBinding;
 import com.jonioliveira.interview.databinding.NavHeaderMainBinding;
 import com.jonioliveira.interview.ui.about.AboutFragment;
 import com.jonioliveira.interview.ui.base.BaseActivity;
-import com.jonioliveira.interview.ui.feed.FeedActivity;
+import com.jonioliveira.interview.ui.calendar.CalendarFragment;
 import com.jonioliveira.interview.ui.login.LoginActivity;
-import com.mindorks.placeholderview.SwipePlaceHolderView;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -102,6 +103,16 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     }
 
     @Override
+    public void openCalendarDayView(Calendar calendar) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .disallowAddToBackStack()
+                .setCustomAnimations(R.anim.slide_left, R.anim.slide_right)
+                .add(R.id.clRootView, CalendarFragment.newInstance(calendar), CalendarFragment.TAG)
+                .commit();
+    }
+
+    @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return fragmentDispatchingAndroidInjector;
     }
@@ -157,6 +168,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         String version = getString(R.string.version) + " " + BuildConfig.VERSION_NAME;
         mMainViewModel.updateAppVersion(version);
         mMainViewModel.onNavMenuCreated();
+        mMainViewModel.updateBtnState(false);
+
+        mActivityMainBinding.calendarRecyclerView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+           mMainViewModel.onDateChange(year, month, dayOfMonth);
+        });
     }
 
     private void setupNavMenu() {
@@ -171,9 +187,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                     switch (item.getItemId()) {
                         case R.id.navItemAbout:
                             showAboutFragment();
-                            return true;
-                        case R.id.navItemFeed:
-                            startActivity(FeedActivity.newIntent(MainActivity.this));
                             return true;
                         case R.id.navItemLogout:
                             mMainViewModel.logout();

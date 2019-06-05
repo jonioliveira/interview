@@ -33,4 +33,8 @@
     <color name="blue_grey_light">#A5B4C8</color>
     <color name="orange">#FFA500</color>
     <color name="yellow">#fff44f</color>
+    <drawable name="item_free_background">#FFFFFF</drawable>
+    <drawable name="item_selected_background">#FF4081</drawable>
+    <drawable name="item_available_background">#FFFFFF</drawable>
+    <drawable name="item_available_selected_background">#FFFFFF</drawable>
 </resources>

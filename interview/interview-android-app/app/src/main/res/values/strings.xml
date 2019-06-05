@@ -72,5 +72,6 @@
     <string name="interviewer">Interviewer</string>
     <string name="candidate">Candidate</string>
     <string name="set_availability">Definir disponibilidade</string>
+    <string name="calendar">Calendar</string>
 
 </resources>

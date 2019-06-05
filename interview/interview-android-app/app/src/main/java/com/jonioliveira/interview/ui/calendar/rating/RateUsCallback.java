@@ -14,7 +14,7 @@
  *  limitations under the License
  */
 
-package com.jonioliveira.interview.ui.main.rating;
+package com.jonioliveira.interview.ui.calendar.rating;
 
 /**
  * Created by amitshekhar on 10/07/17.

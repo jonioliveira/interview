@@ -1,13 +1,14 @@
 package com.jonioliveira.interview.di.builder;
 
 import com.jonioliveira.interview.ui.about.AboutFragmentProvider;
+import com.jonioliveira.interview.ui.calendar.CalendarFragmentProvider;
 import com.jonioliveira.interview.ui.feed.FeedActivity;
 import com.jonioliveira.interview.ui.feed.FeedActivityModule;
 import com.jonioliveira.interview.ui.feed.blogs.BlogFragmentProvider;
 import com.jonioliveira.interview.ui.feed.opensource.OpenSourceFragmentProvider;
 import com.jonioliveira.interview.ui.login.LoginActivity;
 import com.jonioliveira.interview.ui.main.MainActivity;
-import com.jonioliveira.interview.ui.main.rating.RateUsDialogProvider;
+import com.jonioliveira.interview.ui.calendar.rating.RateUsDialogProvider;
 import com.jonioliveira.interview.ui.user.UserActivity;
 
 import dagger.Module;
@@ -30,7 +31,8 @@ public abstract class ActivityBuilder {
 
     @ContributesAndroidInjector(modules = {
             AboutFragmentProvider.class,
-            RateUsDialogProvider.class})
+            RateUsDialogProvider.class,
+            CalendarFragmentProvider.class})
     abstract MainActivity bindMainActivity();
 
 }

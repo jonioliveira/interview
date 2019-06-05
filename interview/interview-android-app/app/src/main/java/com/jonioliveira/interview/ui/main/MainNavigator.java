@@ -16,6 +16,8 @@
 
 package com.jonioliveira.interview.ui.main;
 
+import java.util.Calendar;
+
 /**
  * Created by amitshekhar on 09/07/17.
  */
@@ -25,4 +27,6 @@ public interface MainNavigator {
     void handleError(Throwable throwable);
 
     void openLoginActivity();
+
+    void openCalendarDayView(Calendar calendar);
 }

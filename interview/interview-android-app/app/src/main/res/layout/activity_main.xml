@@ -59,6 +59,7 @@
                     </com.google.android.material.appbar.AppBarLayout>
 
                     <CalendarView
+                        android:id="@+id/calendarRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                     </CalendarView>
@@ -71,6 +72,8 @@
                             android:layout_width="wrap_content"
                             android:text="@string/set_availability"
                             android:layout_gravity="center"
+                            android:onClick="@{() -> viewModel.onAvailabilityBtnClick()}"
+                            android:enabled="@{safeUnbox(viewModel.btnEnabled)}"
                             >
                         </Button>
                     </FrameLayout>
@@ -92,7 +95,6 @@
 
                 <TextView
                     android:id="@+id/tvAppVersion"
-                    style="@style/TextStyle.Title.Sub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"

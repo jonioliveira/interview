@@ -1,39 +1,23 @@
-/*
- *  Copyright (C) 2017 MINDORKS NEXTGEN PRIVATE LIMITED
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      https://mindorks.com/license/apache-v2
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License
- */
+package com.jonioliveira.interview.ui.calendar.rating;
 
-package com.jonioliveira.interview.ui.main.rating;
-
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.jonioliveira.interview.R;
 import com.jonioliveira.interview.ViewModelProviderFactory;
 import com.jonioliveira.interview.databinding.DialogRateUsBinding;
 import com.jonioliveira.interview.ui.base.BaseDialog;
-import dagger.android.support.AndroidSupportInjection;
+
 import javax.inject.Inject;
 
-/**
- * Created by amitshekhar on 10/07/17.
- */
+import dagger.android.support.AndroidSupportInjection;
 
 public class RateUsDialog extends BaseDialog implements RateUsCallback {
 

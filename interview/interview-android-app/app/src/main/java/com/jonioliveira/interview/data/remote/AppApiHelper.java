@@ -19,7 +19,7 @@ public class AppApiHelper implements ApiHelper {
 
     @Override
     public Single<LoginResponse> doServerLoginApiCall(LoginRequest.ServerLoginRequest request) {
-        return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_SERVER_LOGIN)
+        return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_USERS_LOGIN)
                 .addBodyParameter(request)
                 .build()
                 .getObjectSingle(LoginResponse.class);
@@ -27,15 +27,17 @@ public class AppApiHelper implements ApiHelper {
 
     @Override
     public Single<BlogResponse> getBlogApiCall() {
-        return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_BLOG)
+        return null;
+        /*return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_BLOG)
                 .build()
-                .getObjectSingle(BlogResponse.class);
+                .getObjectSingle(BlogResponse.class);*/
     }
 
     @Override
     public Single<OpenSourceResponse> getOpenSourceApiCall() {
-        return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_OPEN_SOURCE)
+        return null;
+        /*return Rx2AndroidNetworking.get(ApiEndPoint.ENDPOINT_OPEN_SOURCE)
                 .build()
-                .getObjectSingle(OpenSourceResponse.class);
+                .getObjectSingle(OpenSourceResponse.class);*/
     }
 }

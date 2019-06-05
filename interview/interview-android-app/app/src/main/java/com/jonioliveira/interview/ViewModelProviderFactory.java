@@ -5,12 +5,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.jonioliveira.interview.data.DataManager;
 import com.jonioliveira.interview.ui.about.AboutViewModel;
+import com.jonioliveira.interview.ui.calendar.CalendarViewModel;
 import com.jonioliveira.interview.ui.feed.FeedViewModel;
 import com.jonioliveira.interview.ui.feed.blogs.BlogViewModel;
 import com.jonioliveira.interview.ui.feed.opensource.OpenSourceViewModel;
 import com.jonioliveira.interview.ui.login.LoginViewModel;
 import com.jonioliveira.interview.ui.main.MainViewModel;
-import com.jonioliveira.interview.ui.main.rating.RateUsViewModel;
+import com.jonioliveira.interview.ui.calendar.rating.RateUsViewModel;
 import com.jonioliveira.interview.ui.user.UserViewModel;
 import com.jonioliveira.interview.utils.rx.SchedulerProvider;
 
@@ -61,6 +62,10 @@ public class ViewModelProviderFactory extends ViewModelProvider.NewInstanceFacto
     else if (modelClass.isAssignableFrom(UserViewModel.class)) {
       //noinspection unchecked
       return (T) new UserViewModel(dataManager,schedulerProvider);
+    }
+    else if (modelClass.isAssignableFrom(CalendarViewModel.class)){
+      //noinspection unchecked
+      return (T) new CalendarViewModel(dataManager, schedulerProvider);
     }
     throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
   }

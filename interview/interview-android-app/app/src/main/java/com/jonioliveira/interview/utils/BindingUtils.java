@@ -7,7 +7,10 @@ import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.jonioliveira.interview.data.model.CalendarItem;
 import com.jonioliveira.interview.data.model.api.BlogResponse;
+import com.jonioliveira.interview.ui.calendar.CalendarAdapter;
+import com.jonioliveira.interview.ui.calendar.CalendarItemViewModel;
 import com.jonioliveira.interview.ui.feed.blogs.BlogAdapter;
 import com.jonioliveira.interview.ui.feed.opensource.OpenSourceAdapter;
 import com.jonioliveira.interview.ui.feed.opensource.OpenSourceItemViewModel;
@@ -35,6 +38,15 @@ public final class BindingUtils {
         if (adapter != null) {
             adapter.clearItems();
             adapter.addItems(openSourceItems);
+        }
+    }
+
+    @BindingAdapter({"adapter"})
+    public static void addCalendarItems(RecyclerView recyclerView, List<CalendarItem> calendarItemList) {
+        CalendarAdapter adapter = (CalendarAdapter) recyclerView.getAdapter();
+        if (adapter != null) {
+            adapter.clearItems();
+            adapter.addItems(calendarItemList);
         }
     }
 

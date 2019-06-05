@@ -14,27 +14,17 @@
  *  limitations under the License
  */
 
-package com.jonioliveira.interview.ui.main.rating;
+package com.jonioliveira.interview.ui.calendar.rating;
 
-import com.jonioliveira.interview.data.DataManager;
-import com.jonioliveira.interview.ui.base.BaseViewModel;
-import com.jonioliveira.interview.utils.rx.SchedulerProvider;
+import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
 
 /**
- * Created by amitshekhar on 10/07/17.
+ * Created by amitshekhar on 14/09/17.
  */
+@Module
+public abstract class RateUsDialogProvider {
 
-public class RateUsViewModel extends BaseViewModel<RateUsCallback> {
-
-    public RateUsViewModel(DataManager dataManager, SchedulerProvider schedulerProvider) {
-        super(dataManager, schedulerProvider);
-    }
-
-    public void onLaterClick() {
-        getNavigator().dismissDialog();
-    }
-
-    public void onSubmitClick() {
-        getNavigator().dismissDialog();
-    }
+    @ContributesAndroidInjector
+    abstract RateUsDialog provideRateUsDialogFactory();
 }

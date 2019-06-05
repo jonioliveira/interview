@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jonioliveira.interview.ui.main.MainActivity">
+
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.jonioliveira.interview.ui.calendar.CalendarViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="@dimen/app_bar_height"
+            android:gravity="center|start"
+            android:background="@color/black_effective"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/navBackBtn"
+                style="@style/Button.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:background="@color/transparent"
+                android:onClick="@{() -> viewModel.onNavBackClick()}"
+                android:tint="@color/white"
+                app:srcCompat="@drawable/ic_keyboard_backspace_24px" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/calendarNavTextSize"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:textColor="@color/white"
+                android:text="@{viewModel.date}"
+                tools:text="22/06/2019"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/calendarRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:adapter="@{viewModel.calendarItemsLiveData}"
+            app:layout_constraintHorizontal_bias="0.0"
+            tools:listitem="@layout/item_calendar_view"
+            android:background="@color/bg_color"
+            android:layout_below="@id/toolbar"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:srcCompat="@drawable/ic_add_white_24px"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:onClick="@{() -> viewModel.onFabClick()}"
+            android:visibility="@{viewModel.addVisible ? View.VISIBLE : View.GONE}"/>
+
+    </RelativeLayout>
+
+</layout>
