@@ -6,12 +6,12 @@ import java.util.Date;
 
 public class AddInterviewModel {
 
-    @NotNull
     @JsonbDateFormat("yyyy-MM-dd HH:mm:ss")
+    @NotNull
     private Date startDate;
 
-    @NotNull
     @JsonbDateFormat("yyyy-MM-dd HH:mm:ss")
+    @NotNull
     private Date endDate;
 
     @NotNull

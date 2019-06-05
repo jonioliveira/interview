@@ -5,8 +5,8 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class GetByDateModel {
+    @JsonbDateFormat("yyyy-MM-dd HH:mm:ss")
     @NotNull
-    @JsonbDateFormat("yyyy-MM-ddThh:mm:ss")
     private Date startDate;
 
     public Date getStartDate() {

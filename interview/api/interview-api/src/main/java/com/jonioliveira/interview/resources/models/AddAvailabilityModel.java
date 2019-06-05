@@ -7,9 +7,11 @@ import java.util.Date;
 public class AddAvailabilityModel {
 
     @JsonbDateFormat("yyyy-MM-dd HH:mm:ss")
+    @NotNull
     private Date startDate;
 
     @JsonbDateFormat("yyyy-MM-dd HH:mm:ss")
+    @NotNull
     private Date endDate;
 
     @NotNull

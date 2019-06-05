@@ -11,11 +11,6 @@ public class InterviewResourceTest {
 
     @Test
     public void testHelloEndpoint() {
-        given()
-          .when().get("/interview")
-          .then()
-             .statusCode(200)
-             .body(is("hello"));
     }
 
 }
