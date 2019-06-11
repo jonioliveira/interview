@@ -42,12 +42,14 @@ public class MainViewModel extends BaseViewModel<MainNavigator> {
         setIsLoading(true);
         getDataManager().setUserAsLoggedOut();
         setIsLoading(false);
+        getNavigator().openLoginActivity();
     }
 
     public void onNavMenuCreated() {
         final String currentUserName = getDataManager().getCurrentUserName();
         if (!TextUtils.isEmpty(currentUserName)) {
-            userName.set(currentUserName);
+            String username = "Olá! " + currentUserName.substring(0, 1).toUpperCase() + currentUserName.substring(1);
+            userName.set(username);
         }
     }
 

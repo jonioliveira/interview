@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import com.androidnetworking.error.ANError;
 import com.jonioliveira.interview.BR;
 import com.jonioliveira.interview.R;
 import com.jonioliveira.interview.ViewModelProviderFactory;
@@ -28,6 +30,9 @@ import com.jonioliveira.interview.databinding.ActivityLoginBinding;
 import com.jonioliveira.interview.ui.base.BaseActivity;
 import com.jonioliveira.interview.ui.main.MainActivity;
 import com.jonioliveira.interview.ui.user.UserActivity;
+import com.jonioliveira.interview.utils.AppLogger;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -64,20 +69,29 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
 
     @Override
     public void handleError(Throwable throwable) {
-        // handle error
+        if(throwable instanceof ANError){
+            ANError anError = (ANError) throwable;
+            if (anError.getErrorCode() == 404) {
+                Toast.makeText(this, "User does not exists", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error while login", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
     public void login() {
-        String name = mActivityLoginBinding.etName.getText().toString();
+        String name = Objects.requireNonNull(mActivityLoginBinding.etName.getText()).toString().trim();
         hideKeyboard();
-        mLoginViewModel.login(null, null);
-        /*if (mLoginViewModel.isEmailAndPasswordValid(email, password)) {
-            hideKeyboard();
-            mLoginViewModel.login(email, password);
+        if (isNetworkConnected()) {
+            if (!name.isEmpty()) {
+                mLoginViewModel.login(name);
+            } else {
+                Toast.makeText(this, "Add the name of user", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(this, getString(R.string.invalid_email_password), Toast.LENGTH_SHORT).show();
-        }*/
+            Toast.makeText(this, "Internet not connected", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -91,7 +105,6 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding, LoginViewM
     public void openAddUser() {
         Intent intent = UserActivity.newIntent(LoginActivity.this);
         startActivity(intent);
-        finish();
     }
 
 

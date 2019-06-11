@@ -7,7 +7,7 @@ public interface DataManager extends PreferencesHelper, ApiHelper {
 
     void setUserAsLoggedOut();
 
-    void updateUserInfo(String name, int userId, UserType userTypeId);
+    void updateUserInfo(String name, long userId, UserType userTypeId);
 
     enum UserType {
         NULL(0),
@@ -18,6 +18,15 @@ public interface DataManager extends PreferencesHelper, ApiHelper {
 
         UserType(int type) {
             mType = type;
+        }
+
+        public static UserType fromId(int id) {
+            for (UserType type : values()) {
+                if (type.mType == id) {
+                    return type;
+                }
+            }
+            return null;
         }
 
         public int getType() {

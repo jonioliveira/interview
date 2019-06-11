@@ -15,8 +15,8 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField("String", "USERS_URL", "\"http://192.168.2.22:8082\"")
-            buildConfigField("String", "INTERVIEW_URL", "\"http://192.168.2.22:8081\"")
+            buildConfigField("String", "USERS_URL", "\"http://192.168.1.72:8082\"")
+            buildConfigField("String", "INTERVIEW_URL", "\"http://192.168.1.72:8081\"")
         }
         release {
             minifyEnabled true
@@ -98,6 +98,9 @@ dependencies {
     // view model
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.lifecycleVersion"
+
+    //leakcanary
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.leakCanaryVersion"
 }
 
 configurations.all {

@@ -56,6 +56,7 @@ ext {
     debugDBVersion = '1.0.3'
     timberVersion = '4.5.1'
     lifecycleVersion = '2.0.0'
+    leakCanaryVersion = '2.0-alpha-2'
 
     // Test dependencies
     junitVersion = '4.12'

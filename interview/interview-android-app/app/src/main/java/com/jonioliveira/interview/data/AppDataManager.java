@@ -1,10 +1,11 @@
 package com.jonioliveira.interview.data;
 
 import com.jonioliveira.interview.data.local.prefs.PreferencesHelper;
+import com.jonioliveira.interview.data.model.api.AddUserRequest;
 import com.jonioliveira.interview.data.model.api.BlogResponse;
 import com.jonioliveira.interview.data.model.api.LoginRequest;
-import com.jonioliveira.interview.data.model.api.LoginResponse;
 import com.jonioliveira.interview.data.model.api.OpenSourceResponse;
+import com.jonioliveira.interview.data.model.api.UserResponse;
 import com.jonioliveira.interview.data.remote.ApiHelper;
 
 import javax.inject.Inject;
@@ -26,8 +27,13 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Single<LoginResponse> doServerLoginApiCall(LoginRequest.ServerLoginRequest request) {
-        return mApiHelper.doServerLoginApiCall(request);
+    public Single<UserResponse> doLoginApiCall(LoginRequest request) {
+        return mApiHelper.doLoginApiCall(request);
+    }
+
+    @Override
+    public Single<UserResponse> doAddUserApiCall(AddUserRequest request) {
+        return mApiHelper.doAddUserApiCall(request);
     }
 
     @Override
@@ -76,9 +82,9 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public void updateUserInfo(String name, int userId, UserType userTypeId) {
+    public void updateUserInfo(String name, long userId, UserType userTypeId) {
 
-        setCurrentUserId((long) userId);
+        setCurrentUserId(userId);
         setCurrentUserName(name);
         setCurrentUserTypeId(userTypeId.getType());
     }

@@ -71,7 +71,7 @@ public class LoginViewModelTest {
 
         doReturn(Single.just(loginResponse))
                 .when(mMockDataManager)
-                .doServerLoginApiCall(new LoginRequest.ServerLoginRequest(email, password));
+                .doLoginApiCall(new LoginRequest.ServerLoginRequest(email, password));
 
         mLoginViewModel.login(email, password);
         mTestScheduler.triggerActions();

@@ -1,14 +1,16 @@
 package com.jonioliveira.interview.data.remote;
 
+import com.jonioliveira.interview.data.model.api.AddUserRequest;
 import com.jonioliveira.interview.data.model.api.BlogResponse;
 import com.jonioliveira.interview.data.model.api.LoginRequest;
-import com.jonioliveira.interview.data.model.api.LoginResponse;
-import com.jonioliveira.interview.data.model.api.LogoutResponse;
 import com.jonioliveira.interview.data.model.api.OpenSourceResponse;
+import com.jonioliveira.interview.data.model.api.UserResponse;
 import com.rx2androidnetworking.Rx2AndroidNetworking;
-import io.reactivex.Single;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import io.reactivex.Single;
 
 @Singleton
 public class AppApiHelper implements ApiHelper {
@@ -18,11 +20,19 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Single<LoginResponse> doServerLoginApiCall(LoginRequest.ServerLoginRequest request) {
+    public Single<UserResponse> doLoginApiCall(LoginRequest request) {
         return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_USERS_LOGIN)
-                .addBodyParameter(request)
+                .addApplicationJsonBody(request)
                 .build()
-                .getObjectSingle(LoginResponse.class);
+                .getObjectSingle(UserResponse.class);
+    }
+
+    @Override
+    public Single<UserResponse> doAddUserApiCall(AddUserRequest request) {
+        return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_USERS_ADD)
+                .addApplicationJsonBody(request)
+                .build()
+                .getObjectSingle(UserResponse.class);
     }
 
     @Override

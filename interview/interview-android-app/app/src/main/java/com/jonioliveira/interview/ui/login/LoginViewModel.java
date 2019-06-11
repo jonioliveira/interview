@@ -1,10 +1,8 @@
 package com.jonioliveira.interview.ui.login;
 
-import android.text.TextUtils;
 import com.jonioliveira.interview.data.DataManager;
 import com.jonioliveira.interview.data.model.api.LoginRequest;
 import com.jonioliveira.interview.ui.base.BaseViewModel;
-import com.jonioliveira.interview.utils.CommonUtils;
 import com.jonioliveira.interview.utils.rx.SchedulerProvider;
 
 
@@ -14,33 +12,15 @@ public class LoginViewModel extends BaseViewModel<LoginNavigator> {
         super(dataManager, schedulerProvider);
     }
 
-    public boolean isEmailAndPasswordValid(String email, String password) {
-        // validate email and password
-        if (TextUtils.isEmpty(email)) {
-            return false;
-        }
-        if (!CommonUtils.isEmailValid(email)) {
-            return false;
-        }
-        if (TextUtils.isEmpty(password)) {
-            return false;
-        }
-        return true;
-    }
-
-    public void login(String email, String password) {
+    public void login(String name) {
         setIsLoading(true);
-        getNavigator().openMainActivity();
-       /* getCompositeDisposable().add(getDataManager()
-                .doServerLoginApiCall(new LoginRequest.ServerLoginRequest(email, password))
+        getCompositeDisposable().add(getDataManager()
+                .doLoginApiCall(new LoginRequest(name))
                 .doOnSuccess(response -> getDataManager()
                         .updateUserInfo(
-                                response.getAccessToken(),
-                                response.getUserId(),
-                                DataManager.LoggedInMode.LOGGED_IN_MODE_SERVER,
-                                response.getUserName(),
-                                response.getUserEmail(),
-                                response.getGoogleProfilePicUrl()))
+                                response.getName(),
+                                response.getId(),
+                                DataManager.UserType.fromId(response.getType())))
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response -> {
@@ -49,7 +29,7 @@ public class LoginViewModel extends BaseViewModel<LoginNavigator> {
                 }, throwable -> {
                     setIsLoading(false);
                     getNavigator().handleError(throwable);
-                }));*/
+                }));
     }
 
 
