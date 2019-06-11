@@ -1,18 +1,14 @@
 package com.jonioliveira.users;
 
-import com.jonioliveira.users.domain.models.User;
-import com.jonioliveira.users.exceptions.UserNotFoundException;
-import com.jonioliveira.users.exceptions.UserTypeNotFoundException;
-import com.jonioliveira.users.services.UserService;
+import com.jonioliveira.users.domain.model.User;
+import com.jonioliveira.users.exception.UserNotFoundException;
+import com.jonioliveira.users.exception.UserTypeNotFoundException;
+import com.jonioliveira.users.service.UserService;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import javax.json.JsonObject;
-import javax.json.JsonValue;
 import javax.ws.rs.core.MediaType;
 
 import static io.restassured.RestAssured.given;

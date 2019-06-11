@@ -1,4 +1,4 @@
-package com.jonioliveira.users.exceptions;
+package com.jonioliveira.users.exception;
 
 public class UserTypeNotFoundException extends Exception {
 

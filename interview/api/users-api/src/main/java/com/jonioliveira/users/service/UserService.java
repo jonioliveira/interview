@@ -1,11 +1,12 @@
-package com.jonioliveira.users.services;
+package com.jonioliveira.users.service;
 
-import com.jonioliveira.users.domain.models.User;
-import com.jonioliveira.users.domain.models.UserType;
+import com.jonioliveira.users.domain.model.User;
+import com.jonioliveira.users.domain.model.UserType;
 import com.jonioliveira.users.domain.repository.UserRepository;
 import com.jonioliveira.users.domain.repository.UserTypeRepository;
-import com.jonioliveira.users.exceptions.UserNotFoundException;
-import com.jonioliveira.users.exceptions.UserTypeNotFoundException;
+import com.jonioliveira.users.exception.UserAlreadyExistsException;
+import com.jonioliveira.users.exception.UserNotFoundException;
+import com.jonioliveira.users.exception.UserTypeNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +26,15 @@ public class UserService {
     UserTypeRepository userTypeRepository;
 
     @Transactional
-    public User addUser(String name, int userType) throws UserTypeNotFoundException {
+    public User addUser(String name, int userType) throws UserTypeNotFoundException, UserAlreadyExistsException {
         UserType type = Optional.ofNullable(userTypeRepository.findById((long) userType)).orElseThrow(() -> new UserTypeNotFoundException(userType));
-        User user = new User(name.toLowerCase(), type);
-        userRepository.persist(user);
-        return user;
+        if(userRepository.findByName(name) == null){
+            User user = new User(name.toLowerCase(), type);
+            userRepository.persist(user);
+            return user;
+        } else {
+            throw new UserAlreadyExistsException(name);
+        }
     }
 
     public User login(String name) throws UserNotFoundException {

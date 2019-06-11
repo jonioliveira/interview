@@ -1,4 +1,4 @@
-package com.jonioliveira.users.services;
+package com.jonioliveira.users.service;
 
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;

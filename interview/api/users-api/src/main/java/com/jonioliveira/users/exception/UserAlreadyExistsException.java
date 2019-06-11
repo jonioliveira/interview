@@ -1,9 +1,9 @@
-package com.jonioliveira.users.exceptions;
+package com.jonioliveira.users.exception;
 
-public class UserNotFoundException extends Exception {
+public class UserAlreadyExistsException extends Exception {
     private String name;
 
-    public UserNotFoundException(String name) {
+    public UserAlreadyExistsException(String name) {
         this.name = name;
     }
 

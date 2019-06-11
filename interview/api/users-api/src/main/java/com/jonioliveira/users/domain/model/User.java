@@ -1,17 +1,16 @@
-package com.jonioliveira.users.domain.models;
+package com.jonioliveira.users.domain.model;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
-public class User extends PanacheEntity {
+public class User extends PanacheEntityBase {
 
     @Id
-    @SequenceGenerator(name="users_id_seq",sequenceName="users_id_seq", initialValue=0, allocationSize=50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_gen")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
 
@@ -21,7 +20,7 @@ public class User extends PanacheEntity {
 
     @NotNull
     @ManyToOne()
-    @JoinColumn(name = "userTypeId")
+    @JoinColumn(name = "usertypeid")
     private UserType type;
 
     public User(String name, UserType type) {

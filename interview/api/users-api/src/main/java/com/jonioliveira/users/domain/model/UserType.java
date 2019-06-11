@@ -1,13 +1,14 @@
-package com.jonioliveira.users.domain.models;
+package com.jonioliveira.users.domain.model;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "usersType")
-public class UserType extends PanacheEntity {
+public class UserType extends PanacheEntityBase {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
