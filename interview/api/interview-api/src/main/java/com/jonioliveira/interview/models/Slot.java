@@ -1,16 +1,18 @@
 package com.jonioliveira.interview.models;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import org.hibernate.usertype.UserType;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "interview")
-public class Interview extends PanacheEntity {
+@Table(name = "slots")
+public class Slot extends PanacheEntityBase {
+
     @Id
-    @SequenceGenerator(name="interview_id_seq",sequenceName="interview_id_seq", initialValue=0, allocationSize=50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_gen")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -27,15 +29,22 @@ public class Interview extends PanacheEntity {
     @Column(name = "candidateId")
     private int candidateId;
 
-    public Interview() {
-        //used for Panache
-    }
+    @NotNull
+    @ManyToOne()
+    @JoinColumn(name = "slotsstatusid")
+    private UserType type;
 
-    public Interview(Date startDate, Date endDate, int interviewerId, int candidateId) {
+
+    public Slot(Date startDate, Date endDate, int interviewerId, int candidateId, @NotNull UserType type) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.interviewerId = interviewerId;
         this.candidateId = candidateId;
+        this.type = type;
+    }
+
+    public Slot() {
+        //used for panache
     }
 
     public Long getId() {
@@ -72,5 +81,13 @@ public class Interview extends PanacheEntity {
 
     public void setCandidateId(int candidateId) {
         this.candidateId = candidateId;
+    }
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
     }
 }
