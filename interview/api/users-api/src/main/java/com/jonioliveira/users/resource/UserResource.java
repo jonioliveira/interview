@@ -95,7 +95,7 @@ public class UserResource {
         }
     }
 
-/*    @Provider
+    @Provider
     public static class ErrorMapper implements ExceptionMapper<Exception> {
 
         @Override
@@ -108,5 +108,5 @@ public class UserResource {
                     .entity(Json.createObjectBuilder().add("error", exception.getMessage()).add("code", code).build())
                     .build();
         }
-    }*/
+    }
 }

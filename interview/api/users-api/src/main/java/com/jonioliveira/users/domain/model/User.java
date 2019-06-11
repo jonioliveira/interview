@@ -13,7 +13,6 @@ public class User extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-
     @NotNull
     @Column(name = "name")
     private String name;
