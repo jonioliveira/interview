@@ -1,4 +1,4 @@
 package com.jonioliveira.interview.exceptions;
 
-public class FailAddSlotException {
+public class FailAddSlotException extends Exception {
 }

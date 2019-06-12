@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Schema(name="Get Slots by date and user Request Model", description="Model of request body to get a list of slots of a certain day and user")
-public class GetSlotsByDateAndUser {
+public class GetSlotsByDateAndUserRequest {
 
     @JsonbDateFormat("yyyy-MM-dd HH:mm:ss")
     @NotNull
@@ -17,11 +17,6 @@ public class GetSlotsByDateAndUser {
     @NotNull
     @Schema(description = "id of user", example = "1")
     private int userId;
-
-    public GetSlotsByDateAndUser(@NotNull Date date, @NotNull int userId) {
-        this.date = date;
-        this.userId = userId;
-    }
 
     public Date getDate() {
         return date;

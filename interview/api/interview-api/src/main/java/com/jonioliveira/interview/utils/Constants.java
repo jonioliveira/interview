@@ -6,5 +6,5 @@ public class Constants {
     public static final int interviewResourceVersion = 1;
     public static final String interviewResourcePath = "/v"+interviewResourceVersion+"/interview";
     public static final int slotsResourceVersion = 1;
-    public static final String slotsResourcePath = "/v"+slotsResourceVersion+"/interview";
+    public static final String slotsResourcePath = "/v"+slotsResourceVersion+"/slots";
 }

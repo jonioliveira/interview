@@ -1,4 +1,4 @@
 package com.jonioliveira.interview.exceptions;
 
-public class SlotsNotFoundException {
+public class SlotsNotFoundException extends Exception {
 }

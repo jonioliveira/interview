@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "slots")
+@Table(name = "slot")
 public class Slot extends PanacheEntityBase {
 
     @Id
@@ -29,18 +29,23 @@ public class Slot extends PanacheEntityBase {
     @Column(name = "candidateId")
     private int candidateId;
 
-    @NotNull
-    @ManyToOne()
-    @JoinColumn(name = "slotsstatusid")
-    private UserType type;
+    @Column(name = "status")
+    private int status;
 
 
-    public Slot(Date startDate, Date endDate, int interviewerId, int candidateId, @NotNull UserType type) {
+    public Slot(Date startDate, Date endDate, int interviewerId, int candidateId, SlotStatus status) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.interviewerId = interviewerId;
         this.candidateId = candidateId;
-        this.type = type;
+        this.status = status.getValue();
+    }
+
+    public Slot(Date startDate, Date endDate, int interviewerId, int status) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.interviewerId = interviewerId;
+        this.status = status;
     }
 
     public Slot() {
@@ -83,11 +88,11 @@ public class Slot extends PanacheEntityBase {
         this.candidateId = candidateId;
     }
 
-    public UserType getType() {
-        return type;
+    public SlotStatus getStatus() {
+        return SlotStatus.fromValue(status);
     }
 
-    public void setType(UserType type) {
-        this.type = type;
+    public void setStatus(SlotStatus status) {
+        this.status = status.getValue();
     }
 }

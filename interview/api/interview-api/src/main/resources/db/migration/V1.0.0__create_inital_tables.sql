@@ -5,15 +5,6 @@ CREATE TABLE slot(
   startDate TIMESTAMP NOT NULL,
   endDate TIMESTAMP NOT NULL,
   interviewerId INT NOT NULL,
-  candidateId INT NOT NULL,
-  statusId INT NOT NULL,
-  FOREIGN KEY (statusId) references slotStatus (id)
+  candidateId INT NULL,
+  status INT NOT NULL
 );
-
-CREATE TABLE slotStatus(
-  id SERIAL PRIMARY KEY,
-  description VARCHAR(250) NOT NULL,
-);
-
-INSERT INTO slotStatus(id, description) VALUES (1, 'availability scheduled');
-INSERT INTO slotStatus(id, description) VALUES (2, 'interview scheduled');
