@@ -40,4 +40,8 @@ public class UserService {
     public User login(String name) throws UserNotFoundException {
         return Optional.ofNullable(userRepository.findByName(name)).orElseThrow(() -> new UserNotFoundException(name));
     }
+
+    public User getUserById(long id) throws  UserNotFoundException{
+        return Optional.ofNullable(userRepository.findUserById(id)).orElseThrow(() -> new UserNotFoundException(id));
+    }
 }

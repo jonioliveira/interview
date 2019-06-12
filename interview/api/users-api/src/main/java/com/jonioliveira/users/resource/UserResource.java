@@ -13,6 +13,7 @@ import com.jonioliveira.users.utils.Mapper;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
@@ -70,6 +71,26 @@ public class UserResource {
         } catch (UserAlreadyExistsException e) {
             LOGGER.error("[MONITOR] | ADD USER | STATUS: ERROR | {}", e.getMessage());
             throw new WebApplicationException("User with name " + e.getName() + " already exists", 409);
+        }
+    }
+
+    @POST
+    @Path("{id}")
+    @Operation(summary = "Login user in system")
+    @APIResponses({
+            @APIResponse(responseCode = "201", description = "The user", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
+            @APIResponse(responseCode = "404", description = "User not found"),
+            @APIResponse(responseCode = "500", description = "Internal Server Error")
+    })
+    public Response getUserById(@Parameter long id){
+        long startTime = System.currentTimeMillis();
+        try {
+            final User user = service.getUserById(id);
+            LOGGER.info("[MONITOR] | GET USER | TIME:{}ms | STATUS: OK", System.currentTimeMillis() - startTime);
+            return Response.ok(Mapper.userToUserResponse(user)).status(200).build();
+        } catch (UserNotFoundException e) {
+            LOGGER.error("[MONITOR] | GET USER | STATUS: ERROR | {}", e.getClass().getCanonicalName());
+            throw new WebApplicationException("User with name of " + e.getName() + " does not exist.", 404);
         }
     }
 

@@ -16,5 +16,9 @@ public class UserRepository implements PanacheRepositoryBase<User, Long> {
         return find("name = ?1 and usertypeid = ?2", name, type).count();
     }
 
+    public User findUserById(long id){
+        return findById(id);
+    }
+
 
 }

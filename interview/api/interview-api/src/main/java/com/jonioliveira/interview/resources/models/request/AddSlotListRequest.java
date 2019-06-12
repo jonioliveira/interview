@@ -1,4 +1,4 @@
 package com.jonioliveira.interview.resources.models.request;
 
-public class GetSlotsByDateAndUser {
+public class AddSlotListRequest {
 }
