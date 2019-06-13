@@ -12,9 +12,7 @@ import com.jonioliveira.interview.resources.models.request.GetSlotsByDateRequest
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @ApplicationScoped
 public class SlotService {
@@ -42,6 +40,17 @@ public class SlotService {
     }
 
     public List<Slot> getSlotsByDateAndUser(GetSlotsByDateAndUserRequest request) throws SlotsNotFoundException {
+/*        Calendar begin = Calendar.getInstance();
+        begin.setTime(request.getDate());
+        Calendar end = begin;
+        begin.set(Calendar.HOUR_OF_DAY, 0);
+        begin.set(Calendar.MINUTE, 0);
+        begin.set(Calendar.SECOND, 0);
+
+        end.set(Calendar.HOUR_OF_DAY, 23);
+        end.set(Calendar.MINUTE, 59);
+        end.set(Calendar.SECOND, 59);*/
+
         return Optional.ofNullable(repository.findByDateAndUser(request.getDate(), request.getUserId())).orElseThrow(SlotsNotFoundException::new);
     }
 

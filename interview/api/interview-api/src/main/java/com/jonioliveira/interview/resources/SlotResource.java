@@ -95,9 +95,11 @@ public class SlotResource {
         try {
             long startTime = System.currentTimeMillis();
 
-            LOGGER.info("[MONITORING] | METHOD: GET SLOTS BY DATE | REQUEST");
+            LOGGER.info("[MONITORING] | METHOD: GET SLOTS BY DATE | REQUEST -> Date: {}", request.getDate());
 
             List<Slot> slotsList= service.getSlotsByDate(request);
+
+            LOGGER.info("SIZE: {}", slotsList.size());
 
             LOGGER.info("[MONITORING] | METHOD: GET SLOTS BY DATE | RESPONSE | Time: {}ms", System.currentTimeMillis()-startTime);
 
@@ -126,11 +128,13 @@ public class SlotResource {
         try {
             long startTime = System.currentTimeMillis();
 
-            LOGGER.info("[MONITORING] | METHOD: GET SLOTS BY DATE | REQUEST");
+            LOGGER.info("[MONITORING] | METHOD: GET SLOTS BY DATE AND USER| REQUEST -> Date: {} User: {}", request.getDate(), request.getUserId());
 
             ArrayList<Slot> slotsList= (ArrayList<Slot>) service.getSlotsByDateAndUser(request);
 
-            LOGGER.info("[MONITORING] | METHOD: GET SLOTS BY DATE | RESPONSE | Time: {}ms", System.currentTimeMillis()-startTime);
+            LOGGER.info("SIZE: {}", slotsList.size());
+
+            LOGGER.info("[MONITORING] | METHOD: GET SLOTS BY DATE AND USER| RESPONSE | Time: {}ms", System.currentTimeMillis()-startTime);
 
             return Response.ok(Mapper.toSlotResponse(slotsList)).status(200).build();
         } catch (Exception e) {
@@ -169,7 +173,7 @@ public class SlotResource {
         }
     }
 
-    @Provider
+/*    @Provider
     public static class ErrorMapper implements ExceptionMapper<Exception> {
 
         @Override
@@ -182,5 +186,5 @@ public class SlotResource {
                     .entity(Json.createObjectBuilder().add("error", exception.getMessage()).add("code", code).build())
                     .build();
         }
-    }
+    }*/
 }

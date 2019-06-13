@@ -11,11 +11,11 @@ import java.util.List;
 public class SlotsRepository implements PanacheRepositoryBase<Slot, Long> {
 
     public List<Slot> findByDate(Date date){
-        return find("startDate", date).list();
+        return find("date(startDate)", date).list();
     }
 
     public List<Slot> findByDateAndUser(Date date, int id){
-        return find("startDate = ?1 and interviewerId = ?2 ", date, id).list();
+        return find("date(startDate) = ?1 and interviewerId = ?2 ", date, id).list();
     }
 
 
