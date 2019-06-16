@@ -45,7 +45,7 @@ public class AppModule {
     @Provides
     @Singleton
     Gson provideGson() {
-        return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        return new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").excludeFieldsWithoutExposeAnnotation().create();
     }
 
     @Provides

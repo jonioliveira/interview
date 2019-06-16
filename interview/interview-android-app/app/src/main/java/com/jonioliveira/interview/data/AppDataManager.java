@@ -1,12 +1,17 @@
 package com.jonioliveira.interview.data;
 
 import com.jonioliveira.interview.data.local.prefs.PreferencesHelper;
+import com.jonioliveira.interview.data.model.api.AddSlotRequest;
 import com.jonioliveira.interview.data.model.api.AddUserRequest;
-import com.jonioliveira.interview.data.model.api.BlogResponse;
 import com.jonioliveira.interview.data.model.api.LoginRequest;
-import com.jonioliveira.interview.data.model.api.OpenSourceResponse;
+import com.jonioliveira.interview.data.model.api.ScheduleSlotRequest;
+import com.jonioliveira.interview.data.model.api.SlotsForDayAndUserRequest;
+import com.jonioliveira.interview.data.model.api.SlotsForDayRequest;
+import com.jonioliveira.interview.data.model.api.SlotsResponse;
 import com.jonioliveira.interview.data.model.api.UserResponse;
 import com.jonioliveira.interview.data.remote.ApiHelper;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,64 +21,75 @@ import io.reactivex.Single;
 @Singleton
 public class AppDataManager implements DataManager {
 
-    private final ApiHelper mApiHelper;
+    private final ApiHelper apiHelper;
 
-    private final PreferencesHelper mPreferencesHelper;
+    private final PreferencesHelper preferencesHelper;
+
 
     @Inject
     public AppDataManager(PreferencesHelper preferencesHelper, ApiHelper apiHelper) {
-        mPreferencesHelper = preferencesHelper;
-        mApiHelper = apiHelper;
+        this.preferencesHelper = preferencesHelper;
+        this.apiHelper = apiHelper;
     }
 
     @Override
     public Single<UserResponse> doLoginApiCall(LoginRequest request) {
-        return mApiHelper.doLoginApiCall(request);
+        return apiHelper.doLoginApiCall(request);
     }
 
     @Override
     public Single<UserResponse> doAddUserApiCall(AddUserRequest request) {
-        return mApiHelper.doAddUserApiCall(request);
+        return apiHelper.doAddUserApiCall(request);
     }
 
     @Override
-    public Single<BlogResponse> getBlogApiCall() {
-        return mApiHelper.getBlogApiCall();
+    public Single<List<SlotsResponse>> doGetSlotsForDayByUser(SlotsForDayAndUserRequest request) {
+        return apiHelper.doGetSlotsForDayByUser(request);
     }
 
     @Override
-    public Long getCurrentUserId() {
-        return mPreferencesHelper.getCurrentUserId();
+    public Single<List<SlotsResponse>> doGetSlotsForDay(SlotsForDayRequest request) {
+        return apiHelper.doGetSlotsForDay(request);
     }
 
     @Override
-    public void setCurrentUserId(Long userId) {
-        mPreferencesHelper.setCurrentUserId(userId);
+    public Single<SlotsResponse> doSheduleSlot(ScheduleSlotRequest request) {
+        return apiHelper.doSheduleSlot(request);
+    }
+
+    @Override
+    public Single<List<SlotsResponse>> doAddSlotRequest(AddSlotRequest[] request) {
+        return apiHelper.doAddSlotRequest(request);
+    }
+
+    @Override
+    public Integer getCurrentUserId() {
+        return preferencesHelper.getCurrentUserId();
+    }
+
+    @Override
+    public void setCurrentUserId(Integer userId) {
+        preferencesHelper.setCurrentUserId(userId);
     }
 
     @Override
     public String getCurrentUserName() {
-        return mPreferencesHelper.getCurrentUserName();
+        return preferencesHelper.getCurrentUserName();
     }
 
     @Override
     public void setCurrentUserName(String userName) {
-        mPreferencesHelper.setCurrentUserName(userName);
+        preferencesHelper.setCurrentUserName(userName);
     }
 
     @Override
-    public int getCurrentUserTypeId() {
-        return mPreferencesHelper.getCurrentUserTypeId();
+    public Integer getCurrentUserTypeId() {
+        return preferencesHelper.getCurrentUserTypeId();
     }
 
     @Override
-    public void setCurrentUserTypeId(int userTypeId) {
-        mPreferencesHelper.setCurrentUserTypeId(userTypeId);
-    }
-
-    @Override
-    public Single<OpenSourceResponse> getOpenSourceApiCall() {
-        return mApiHelper.getOpenSourceApiCall();
+    public void setCurrentUserTypeId(Integer userTypeId) {
+        preferencesHelper.setCurrentUserTypeId(userTypeId);
     }
 
     @Override
@@ -82,8 +98,7 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public void updateUserInfo(String name, long userId, UserType userTypeId) {
-
+    public void updateUserInfo(String name, int userId, UserType userTypeId) {
         setCurrentUserId(userId);
         setCurrentUserName(name);
         setCurrentUserTypeId(userTypeId.getType());

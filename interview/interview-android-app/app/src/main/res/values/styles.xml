@@ -72,11 +72,6 @@
         <item name="android:background">@drawable/button_primary_bg</item>
     </style>
 
-    <style name="Button.Secondary" parent="Button">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/button_secondary_bg</item>
-    </style>
-
     <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/gray</item>
     </style>

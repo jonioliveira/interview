@@ -7,7 +7,7 @@ public interface DataManager extends PreferencesHelper, ApiHelper {
 
     void setUserAsLoggedOut();
 
-    void updateUserInfo(String name, long userId, UserType userTypeId);
+    void updateUserInfo(String name, int userId, UserType userTypeId);
 
     enum UserType {
         NULL(0),

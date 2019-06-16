@@ -3,15 +3,15 @@ package com.jonioliveira.interview.data.local.prefs;
 
 public interface PreferencesHelper {
 
-    Long getCurrentUserId();
+    Integer getCurrentUserId();
 
-    void setCurrentUserId(Long userId);
+    void setCurrentUserId(Integer userId);
 
     String getCurrentUserName();
 
     void setCurrentUserName(String userName);
 
-    int getCurrentUserTypeId();
+    Integer getCurrentUserTypeId();
 
-    void setCurrentUserTypeId(int userTypeId);
+    void setCurrentUserTypeId(Integer userTypeId);
 }

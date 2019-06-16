@@ -1,20 +1,27 @@
 package com.jonioliveira.interview.data.model;
 
+import java.util.Date;
+
 public class CalendarItem {
 
     private int id;
 
-    private String hour;
-
     private boolean isSelected;
 
-    private boolean isAvailable;
+    private SlotStatusEnum status;
 
-    public CalendarItem(int id, String hour, boolean isSelected, boolean isAvailable) {
+    private Date startDate;
+
+    private Date endDate;
+
+    private int slotId;
+
+    public CalendarItem(int id, Date startDate, Date endDate) {
         this.id = id;
-        this.hour = hour;
-        this.isSelected = isSelected;
-        this.isAvailable = isAvailable;
+        this.isSelected = false;
+        this.status = SlotStatusEnum.FREE;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public int getId() {
@@ -25,14 +32,6 @@ public class CalendarItem {
         this.id = id;
     }
 
-    public String getHour() {
-        return hour;
-    }
-
-    public void setHour(String hour) {
-        this.hour = hour;
-    }
-
     public boolean isSelected() {
         return isSelected;
     }
@@ -41,11 +40,35 @@ public class CalendarItem {
         isSelected = selected;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public SlotStatusEnum getStatus() {
+        return status;
     }
 
-    public void setAvailable(boolean available) {
-        isAvailable = available;
+    public void setStatus(SlotStatusEnum status) {
+        this.status = status;
+    }
+
+    public int getSlotId() {
+        return slotId;
+    }
+
+    public void setSlotId(int slotId) {
+        this.slotId = slotId;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }

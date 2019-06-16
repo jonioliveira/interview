@@ -19,7 +19,7 @@
             android:id="@+id/hourTextView"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.hour}"
+            android:text="@{viewModel.hourLabel}"
             android:layout_gravity="bottom"
             tools:text="00:00" />
 

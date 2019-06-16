@@ -6,13 +6,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jonioliveira.interview.R;
 import com.jonioliveira.interview.data.model.CalendarItem;
+import com.jonioliveira.interview.data.model.SlotStatusEnum;
 import com.jonioliveira.interview.databinding.ItemCalendarViewBinding;
 import com.jonioliveira.interview.ui.base.BaseViewHolder;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CalendarAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
@@ -33,12 +35,11 @@ public class CalendarAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 24;
+        return 13;
     }
 
     public void addItems(List<CalendarItem> repoList) {
         list.addAll(repoList);
-        notifyDataSetChanged();
     }
 
     public void clearItems() {
@@ -70,20 +71,11 @@ public class CalendarAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         @Override
         public void onBind(int position) {
             calendarItem = list.get(position);
-            if (calendarItem.isSelected()){
-                final CalendarItemViewModel itemViewModel = new CalendarItemViewModel("FREE",
-                        calendarItem.getHour(),
-                        viewBinding.getRoot().getContext().getDrawable(R.drawable.item_selected_background),
-                        this);
-                viewModel= itemViewModel;
-            }else {
-                final CalendarItemViewModel itemViewModel = new CalendarItemViewModel("FREE",
-                        calendarItem.getHour(),
-                        viewBinding.getRoot().getContext().getDrawable(R.drawable.item_available_background),
-                        this);
-                viewModel= itemViewModel;
-            }
+            String text = calendarItem.getStatus().toString();
 
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            viewModel = new CalendarItemViewModel(viewBinding.getRoot().getContext(), text, format.format(calendarItem.getStartDate()), this);
+            viewModel.setBackground(calendarItem.getStatus(), calendarItem.isSelected());
 
             viewBinding.setViewModel(viewModel);
             viewBinding.executePendingBindings();
@@ -91,13 +83,14 @@ public class CalendarAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
         @Override
         public void onItemClick() {
-            listener.onItemSelected(calendarItem);
-            if(calendarItem.isSelected()){
-                calendarItem.setSelected(false);
-                viewModel.bgColor.set(viewBinding.getRoot().getContext().getDrawable(R.drawable.item_available_background));
-            }else {
+            if(calendarItem.getStatus() != SlotStatusEnum.INTERVIEW){
+                listener.onItemSelected(calendarItem);
+                if(calendarItem.isSelected()){
+                    calendarItem.setSelected(false);
+                    viewModel.setBackground(calendarItem.getStatus(), false);
+                }
                 calendarItem.setSelected(true);
-                viewModel.bgColor.set(viewBinding.getRoot().getContext().getDrawable(R.drawable.item_selected_background));
+                viewModel.setBackground(calendarItem.getStatus(), true);
             }
         }
     }

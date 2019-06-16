@@ -35,6 +35,7 @@
     <color name="yellow">#fff44f</color>
     <drawable name="item_free_background">#FFFFFF</drawable>
     <drawable name="item_selected_background">#FF4081</drawable>
-    <drawable name="item_available_background">#FFFFFF</drawable>
+    <drawable name="item_available_background">#FFF68F</drawable>
+    <drawable name="item_interview_background">#76E482</drawable>
     <drawable name="item_available_selected_background">#FFFFFF</drawable>
 </resources>

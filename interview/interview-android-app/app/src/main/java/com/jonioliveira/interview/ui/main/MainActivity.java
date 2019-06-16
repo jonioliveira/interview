@@ -21,7 +21,6 @@ import com.jonioliveira.interview.R;
 import com.jonioliveira.interview.ViewModelProviderFactory;
 import com.jonioliveira.interview.databinding.ActivityMainBinding;
 import com.jonioliveira.interview.databinding.NavHeaderMainBinding;
-import com.jonioliveira.interview.ui.about.AboutFragment;
 import com.jonioliveira.interview.ui.base.BaseActivity;
 import com.jonioliveira.interview.ui.calendar.CalendarFragment;
 import com.jonioliveira.interview.ui.login.LoginActivity;
@@ -67,18 +66,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     }
 
     @Override
-    public void handleError(Throwable throwable) {
-        // handle error
-    }
-
-    @Override
     public void onBackPressed() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentByTag(AboutFragment.TAG);
+        Fragment fragment = fragmentManager.findFragmentByTag(CalendarFragment.TAG);
         if (fragment == null) {
             super.onBackPressed();
         } else {
-            onFragmentDetached(AboutFragment.TAG);
+            onFragmentDetached(CalendarFragment.TAG);
         }
     }
 
@@ -104,6 +98,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
     @Override
     public void openCalendarDayView(Calendar calendar) {
+        lockDrawer();
         getSupportFragmentManager()
                 .beginTransaction()
                 .disallowAddToBackStack()
@@ -131,6 +126,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         if (mDrawer != null) {
             mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
+
+        mActivityMainBinding.calendarRecyclerView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            mMainViewModel.onDateChange(year, month, dayOfMonth);
+        });
     }
 
     private void lockDrawer() {
@@ -169,10 +168,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         mMainViewModel.updateAppVersion(version);
         mMainViewModel.onNavMenuCreated();
         mMainViewModel.updateBtnState(false);
-
-        mActivityMainBinding.calendarRecyclerView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-           mMainViewModel.onDateChange(year, month, dayOfMonth);
-        });
+        getString(R.string.set_availability);
+        mMainViewModel.updateBtnText();
     }
 
     private void setupNavMenu() {
@@ -184,27 +181,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         mNavigationView.setNavigationItemSelectedListener(
                 item -> {
                     mDrawer.closeDrawer(GravityCompat.START);
-                    switch (item.getItemId()) {
-                        case R.id.navItemAbout:
-                            showAboutFragment();
-                            return true;
-                        case R.id.navItemLogout:
-                            mMainViewModel.logout();
-                            return true;
-                        default:
-                            return false;
+                    if (item.getItemId() == R.id.navItemLogout) {
+                        mMainViewModel.logout();
+                        return true;
                     }
+                    return false;
                 });
-    }
-
-    private void showAboutFragment() {
-        lockDrawer();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .disallowAddToBackStack()
-                .setCustomAnimations(R.anim.slide_left, R.anim.slide_right)
-                .add(R.id.clRootView, AboutFragment.newInstance(), AboutFragment.TAG)
-                .commit();
     }
 
     private void unlockDrawer() {

@@ -7,7 +7,7 @@ public final class UserResponse {
 
     @Expose
     @SerializedName("id")
-    private Long id;
+    private int id;
 
     @Expose
     @SerializedName("name")
@@ -17,17 +17,17 @@ public final class UserResponse {
     @SerializedName("type")
     private int type;
 
-    public UserResponse(Long id, String name, int type) {
+    public UserResponse(int id, String name, int type) {
         this.id = id;
         this.name = name;
         this.type = type;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

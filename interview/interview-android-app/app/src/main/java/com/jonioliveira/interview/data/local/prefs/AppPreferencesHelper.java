@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.jonioliveira.interview.di.PreferenceInfo;
 import com.jonioliveira.interview.utils.AppConstants;
+
 import javax.inject.Inject;
 
 public class AppPreferencesHelper implements PreferencesHelper {
@@ -24,15 +25,15 @@ public class AppPreferencesHelper implements PreferencesHelper {
     }
 
     @Override
-    public Long getCurrentUserId() {
-        long userId = mPrefs.getLong(PREF_KEY_CURRENT_USER_ID, AppConstants.NULL_INDEX);
+    public Integer getCurrentUserId() {
+        int userId = mPrefs.getInt(PREF_KEY_CURRENT_USER_ID, AppConstants.NULL_INDEX);
         return userId == AppConstants.NULL_INDEX ? null : userId;
     }
 
     @Override
-    public void setCurrentUserId(Long userId) {
-        long id = userId == null ? AppConstants.NULL_INDEX : userId;
-        mPrefs.edit().putLong(PREF_KEY_CURRENT_USER_ID, id).apply();
+    public void setCurrentUserId(Integer userId) {
+        int id = userId == null ? AppConstants.NULL_INDEX : userId;
+        mPrefs.edit().putInt(PREF_KEY_CURRENT_USER_ID, id).apply();
     }
 
     @Override
@@ -46,12 +47,14 @@ public class AppPreferencesHelper implements PreferencesHelper {
     }
 
     @Override
-    public int getCurrentUserTypeId() {
-        return mPrefs.getInt(PREF_KEY_CURRENT_USER_TYPE_ID, 0);
+    public Integer getCurrentUserTypeId() {
+        int id = mPrefs.getInt(PREF_KEY_CURRENT_USER_TYPE_ID, AppConstants.NULL_INDEX);
+        return id == AppConstants.NULL_INDEX ? null : id;
     }
 
     @Override
-    public void setCurrentUserTypeId(int userTypeId) {
-        mPrefs.edit().putInt(PREF_KEY_CURRENT_USER_TYPE_ID, userTypeId).apply();
+    public void setCurrentUserTypeId(Integer userTypeId) {
+        int id = userTypeId == null ? AppConstants.NULL_INDEX : userTypeId;
+        mPrefs.edit().putInt(PREF_KEY_CURRENT_USER_TYPE_ID, id).apply();
     }
 }

@@ -2,6 +2,7 @@ package com.jonioliveira.interview.ui.calendar;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,14 +16,15 @@ import com.jonioliveira.interview.R;
 import com.jonioliveira.interview.ViewModelProviderFactory;
 import com.jonioliveira.interview.databinding.FragmentCalendarBinding;
 import com.jonioliveira.interview.ui.base.BaseFragment;
-import com.jonioliveira.interview.ui.calendar.rating.RateUsDialog;
+import com.jonioliveira.interview.ui.calendar.dialog.CalendarDialog;
 import com.jonioliveira.interview.utils.AppConstants;
+import com.jonioliveira.interview.utils.AppLogger;
 
 import java.util.Calendar;
 
 import javax.inject.Inject;
 
-public class CalendarFragment extends BaseFragment<FragmentCalendarBinding, CalendarViewModel> implements CalendarNavigator {
+public class CalendarFragment extends BaseFragment<FragmentCalendarBinding, CalendarViewModel> implements CalendarNavigator, CalendarDialog.Listener {
 
     public static final String TAG = CalendarFragment.class.getSimpleName();
 
@@ -71,7 +73,31 @@ public class CalendarFragment extends BaseFragment<FragmentCalendarBinding, Cale
 
     @Override
     public void add() {
-        RateUsDialog.newInstance().show(getFragmentManager());
+        CalendarDialog calendarDialog = CalendarDialog.newInstance();
+        calendarDialog.setListener(this);
+        calendarDialog.show(getFragmentManager());
+    }
+
+    @Override
+    public void handleError(Throwable throwable) {
+        AppLogger.e(throwable, "Error");
+    }
+
+    @Override
+    public void slotSubmited() {
+        Toast.makeText(getContext(), "Submitted", Toast.LENGTH_SHORT).show();
+        mCalendarViewModel.refresh();
+    }
+
+    @Override
+    public void slotSubmissionError() {
+        Toast.makeText(getContext(), "ERROR", Toast.LENGTH_SHORT).show();
+        mCalendarViewModel.refresh();
+    }
+
+    @Override
+    public void handleCalendarRefresh() {
+        calendarAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -94,5 +120,15 @@ public class CalendarFragment extends BaseFragment<FragmentCalendarBinding, Cale
         fragmentCalendarBinding.calendarRecyclerView.setItemAnimator(new DefaultItemAnimator());
         fragmentCalendarBinding.calendarRecyclerView.setAdapter(calendarAdapter);
         calendarAdapter.setListener(mCalendarViewModel);
+    }
+
+    @Override
+    public void onDismiss() {
+        mCalendarViewModel.refresh();
+    }
+
+    @Override
+    public void onSubmit() {
+        mCalendarViewModel.submit();
     }
 }
