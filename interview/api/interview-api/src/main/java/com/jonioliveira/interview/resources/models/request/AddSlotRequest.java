@@ -21,7 +21,7 @@ public class AddSlotRequest {
 
     @NotNull
     @Schema(description = "id of interviewer", example = "1")
-    private Integer interviewerId;
+    private int interviewerId;
 
     public Date getStartDate() {
         return startDate;

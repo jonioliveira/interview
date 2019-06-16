@@ -17,6 +17,7 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
@@ -58,7 +59,7 @@ public class SlotResource {
     })
     public Response add(@RequestBody(description = "Request object",
             required = true,
-            content = @Content(schema = @Schema(implementation = AddSlotRequest.class)))
+            content = @Content(schema = @Schema(implementation = AddSlotRequest.class, type = SchemaType.ARRAY)))
                                 @Valid ArrayList<AddSlotRequest> request){
 
         try {
@@ -118,7 +119,7 @@ public class SlotResource {
     @Operation(summary = "Get a list of slots from a day and user")
     @Tag(name = "Get")
     @APIResponses({
-            @APIResponse(responseCode = "201", description = "The slots", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SlotResponse.class, type = SchemaType.ARRAY))),
+            @APIResponse(responseCode = "200", description = "The slots", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SlotResponse.class, type = SchemaType.ARRAY))),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response getByDateAndUser(@RequestBody(description = "Request object",
@@ -150,7 +151,7 @@ public class SlotResource {
     @Operation(summary = "Schedule an interview")
     @Tag(name = "Schedule")
     @APIResponses({
-            @APIResponse(responseCode = "201", description = "The slot of interview", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SlotResponse.class, type = SchemaType.ARRAY))),
+            @APIResponse(responseCode = "200", description = "The slot was deleted", content = @Content(mediaType = "application/json")),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response scheduleInterview(@RequestBody(description = "Request object",
@@ -173,7 +174,34 @@ public class SlotResource {
         }
     }
 
-/*    @Provider
+    @DELETE
+    @Path("/{id}")
+    @Timed(name = "delete_slot", unit = MetricUnits.MILLISECONDS)
+    @Counted(name = "delete_slot_count", monotonic = true)
+    @Operation(summary = "Delete a Slot")
+    @Tag(name = "Delete")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "The slot of interview", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SlotResponse.class))),
+            @APIResponse(responseCode = "500", description = "Internal Server Error")
+    })
+    public Response delete(@Parameter int id){
+        try {
+            long startTime = System.currentTimeMillis();
+
+            LOGGER.info("[MONITORING] | METHOD: DELETE | REQUEST");
+
+            service.deleteSlot(id);
+
+            LOGGER.info("[MONITORING] | METHOD: DELETE | RESPONSE | Time: {}ms", System.currentTimeMillis()-startTime);
+
+            return Response.ok().status(200).build();
+        } catch (Exception e) {
+            LOGGER.error("METHOD: DELETE | {}", e.getCause(), e);
+            throw new WebApplicationException("Add slot error", 500);
+        }
+    }
+
+    @Provider
     public static class ErrorMapper implements ExceptionMapper<Exception> {
 
         @Override
@@ -186,5 +214,5 @@ public class SlotResource {
                     .entity(Json.createObjectBuilder().add("error", exception.getMessage()).add("code", code).build())
                     .build();
         }
-    }*/
+    }
 }

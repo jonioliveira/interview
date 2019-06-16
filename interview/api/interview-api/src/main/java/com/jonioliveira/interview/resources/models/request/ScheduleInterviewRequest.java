@@ -9,17 +9,17 @@ public class ScheduleInterviewRequest {
 
    @NotNull
    @Schema(description = "the id of slot", example = "1")
-   private long slotId;
+   private int slotId;
 
    @NotNull
    @Schema(description = "the id of candidate", example = "1")
    private int candidateId;
 
-   public long getSlotId() {
+   public int getSlotId() {
       return slotId;
    }
 
-   public void setSlotId(long slotId) {
+   public void setSlotId(int slotId) {
       this.slotId = slotId;
    }
 

@@ -13,7 +13,7 @@ public class Slot extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "startDate")
@@ -52,7 +52,7 @@ public class Slot extends PanacheEntityBase {
         //used for panache
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 

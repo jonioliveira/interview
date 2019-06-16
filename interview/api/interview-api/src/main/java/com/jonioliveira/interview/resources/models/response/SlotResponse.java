@@ -9,26 +9,26 @@ import java.util.Date;
 public class SlotResponse {
 
     @Schema(description="The id of slot")
-    private Long id;
+    private int id;
 
-    @Schema(description="The end date of slot")
+    @Schema(description="The end date of slot", example = "2019-08-10 10:00:00")
     @JsonbDateFormat("yyyy-MM-dd HH:mm:ss")
     private Date startDate;
 
-    @Schema(description="The end date of slot")
+    @Schema(description="The end date of slot",  example = "2019-08-10 11:00:00")
     @JsonbDateFormat("yyyy-MM-dd HH:mm:ss")
     private Date endDate;
 
-    @Schema(description="The id of interviewer")
+    @Schema(description="The id of interviewer", example = "1")
     private int interviewerId;
 
-    @Schema(description="The id of candidate")
+    @Schema(description="The id of candidate", example = "10")
     private int candidateId;
 
-    @Schema(description="The status of slot")
+    @Schema(description="The status of slot", example = "1")
     private int status;
 
-    public SlotResponse(Long id, Date startDate, Date endDate, int interviewerId, int candidateId, int status) {
+    public SlotResponse(int id, Date startDate, Date endDate, int interviewerId, int candidateId, int status) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -37,11 +37,11 @@ public class SlotResponse {
         this.status = status;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
