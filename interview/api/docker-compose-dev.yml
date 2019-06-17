@@ -6,18 +6,21 @@ services:
     environment:
       POSTGRES_PASSWORD: "Postgres2019!"
       POSTGRES_USER: postgres
+      POSTGRES_DB: interviews
       PGDATA : /var/lib/postgresql/data
     ports:
       - "15432:5432"
     networks:
       - postgres-interview-network
     volumes:
+      -  ./interview-db.sql:/docker-entrypoint-initdb.d/db.sql
       -  db-interview-data:/var/lib/postgresql/data
   postgres-user:
     image: postgres
     environment:
       POSTGRES_PASSWORD: "Postgres2019!"
       POSTGRES_USER: postgres
+      POSTGRES_DB: users
       PGDATA: /var/lib/postgresql/data
     ports:
       - "15433:5432"
