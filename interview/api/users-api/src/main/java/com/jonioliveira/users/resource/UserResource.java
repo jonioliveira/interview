@@ -82,7 +82,7 @@ public class UserResource {
             @APIResponse(responseCode = "404", description = "User not found"),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public Response getUserById(@Parameter long id){
+    public Response getUserById(@Parameter int id){
         long startTime = System.currentTimeMillis();
         try {
             final User user = service.getUserById(id);

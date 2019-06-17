@@ -11,7 +11,7 @@ public class UserType extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
 
     @NotNull
     @Column(name = "name")
@@ -25,11 +25,11 @@ public class UserType extends PanacheEntityBase {
         //used for panache
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

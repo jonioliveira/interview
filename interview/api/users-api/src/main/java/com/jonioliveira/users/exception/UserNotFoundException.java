@@ -3,13 +3,13 @@ package com.jonioliveira.users.exception;
 public class UserNotFoundException extends Exception {
     private String name;
 
-    private long id;
+    private int id;
 
     public UserNotFoundException(String name) {
         this.name = name;
     }
 
-    public UserNotFoundException(long id){
+    public UserNotFoundException(int id){
         this.id = id;
     }
 
@@ -21,11 +21,11 @@ public class UserNotFoundException extends Exception {
         this.name = name;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 }

@@ -6,17 +6,17 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class UserRepository implements PanacheRepositoryBase<User, Long> {
+public class UserRepository implements PanacheRepositoryBase<User, Integer> {
 
     public User findByName(String name){
         return find("name", name).firstResult();
     }
 
-    public long findByNameAndType(String name, long type){
-        return find("name = ?1 and usertypeid = ?2", name, type).count();
+    public int findByNameAndType(String name, int type){
+        return (int) find("name = ?1 and usertypeid = ?2", name, type).count();
     }
 
-    public User findUserById(long id){
+    public User findUserById(int id){
         return findById(id);
     }
 

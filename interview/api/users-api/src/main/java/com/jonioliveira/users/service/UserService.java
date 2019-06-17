@@ -27,7 +27,7 @@ public class UserService {
 
     @Transactional
     public User addUser(String name, int userType) throws UserTypeNotFoundException, UserAlreadyExistsException {
-        UserType type = Optional.ofNullable(userTypeRepository.findById((long) userType)).orElseThrow(() -> new UserTypeNotFoundException(userType));
+        UserType type = Optional.ofNullable(userTypeRepository.findById((int) userType)).orElseThrow(() -> new UserTypeNotFoundException(userType));
         if(userRepository.findByName(name) == null){
             User user = new User(name.toLowerCase(), type);
             userRepository.persist(user);
@@ -41,7 +41,7 @@ public class UserService {
         return Optional.ofNullable(userRepository.findByName(name)).orElseThrow(() -> new UserNotFoundException(name));
     }
 
-    public User getUserById(long id) throws  UserNotFoundException{
+    public User getUserById(int id) throws  UserNotFoundException{
         return Optional.ofNullable(userRepository.findUserById(id)).orElseThrow(() -> new UserNotFoundException(id));
     }
 }
