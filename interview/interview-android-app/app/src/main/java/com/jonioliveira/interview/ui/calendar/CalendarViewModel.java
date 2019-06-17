@@ -11,6 +11,7 @@ import com.jonioliveira.interview.data.model.SlotStatusEnum;
 import com.jonioliveira.interview.data.model.UserTypeEnum;
 import com.jonioliveira.interview.data.model.api.AddSlotRequest;
 import com.jonioliveira.interview.data.model.api.SlotsForDayAndUserRequest;
+import com.jonioliveira.interview.data.model.api.SlotsForDayRequest;
 import com.jonioliveira.interview.data.model.api.SlotsResponse;
 import com.jonioliveira.interview.ui.base.BaseViewModel;
 import com.jonioliveira.interview.utils.CollectionUtils;
@@ -40,27 +41,11 @@ public class CalendarViewModel extends BaseViewModel<CalendarNavigator> implemen
 
     public void setHours() {
         setIsLoading(true);
-        List<CalendarItem> list = getCalendarItemList();
-        calendarItemsLiveData.setValue(list);
-
-        getCompositeDisposable().add(getDataManager()
-                .doGetSlotsForDayByUser(new SlotsForDayAndUserRequest(calendar.getTime(), getDataManager().getCurrentUserId()))
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(response -> {
-                    for (SlotsResponse slotsResponse : response) {
-                        CalendarItem calendarItem = CollectionUtils.find(list, item -> TimeUtils.dateIsSame(item.getStartDate(), slotsResponse.getStartDate()));
-                        if (calendarItem != null) {
-                            calendarItem.setSlotId(slotsResponse.getId());
-                            calendarItem.setStatus(SlotStatusEnum.fromValue(slotsResponse.getStatus()));
-                        }
-                    }
-                    setIsLoading(false);
-                    getNavigator().handleCalendarRefresh();
-                }, throwable -> {
-                    setIsLoading(false);
-                    getNavigator().handleError(throwable);
-                }));
+        if (UserTypeEnum.fromValue(getDataManager().getCurrentUserTypeId()) == UserTypeEnum.INTERVIEWER){
+            setInterviewerHours();
+        } else {
+            setCandidateHours();
+        }
     }
 
     public LiveData<List<CalendarItem>> getCalendarItemsLiveData() {
@@ -111,9 +96,12 @@ public class CalendarViewModel extends BaseViewModel<CalendarNavigator> implemen
                         setIsLoading(false);
                         getNavigator().slotSubmissionError();
                     }));
+
         }else {
 
         }
+
+        getNavigator().handleCalendarRefresh();
     }
 
     public void refresh(){
@@ -142,4 +130,52 @@ public class CalendarViewModel extends BaseViewModel<CalendarNavigator> implemen
         }
         return list;
     }
+
+    public void setInterviewerHours(){
+        List<CalendarItem> list = getCalendarItemList();
+        calendarItemsLiveData.setValue(list);
+
+        getCompositeDisposable().add(getDataManager()
+                .doGetSlotsForDayByUser(new SlotsForDayAndUserRequest(calendar.getTime(), getDataManager().getCurrentUserId()))
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(response -> {
+                    for (SlotsResponse slotsResponse : response) {
+                        CalendarItem calendarItem = CollectionUtils.find(list, item -> TimeUtils.dateIsSame(item.getStartDate(), slotsResponse.getStartDate()));
+                        if (calendarItem != null) {
+                            calendarItem.setSlotId(slotsResponse.getId());
+                            calendarItem.setStatus(SlotStatusEnum.fromValue(slotsResponse.getStatus()));
+                        }
+                    }
+                    setIsLoading(false);
+                    getNavigator().handleCalendarRefresh();
+                }, throwable -> {
+                    setIsLoading(false);
+                    getNavigator().handleError(throwable);
+                }));
+
+    }
+
+    public void setCandidateHours(){
+        List<CalendarItem> list = new ArrayList<CalendarItem>();
+        calendarItemsLiveData.setValue(list);
+
+        getCompositeDisposable().add(getDataManager()
+                .doGetSlotsForDay(new SlotsForDayRequest(calendar.getTime()))
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(response -> {
+                    int i = 0;
+                    for (SlotsResponse slotsResponse : response) {
+                        list.add(new CalendarItem(i, slotsResponse.getStatus(), slotsResponse.getStartDate(), slotsResponse.getEndDate(), slotsResponse.getId()));
+                        i++;
+                    }
+                    setIsLoading(false);
+                    getNavigator().handleCalendarRefresh();
+                }, throwable -> {
+                    setIsLoading(false);
+                    getNavigator().handleError(throwable);
+                }));
+    }
 }
+

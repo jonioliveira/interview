@@ -24,6 +24,15 @@ public class CalendarItem {
         this.endDate = endDate;
     }
 
+    public CalendarItem(int id, int status, Date startDate, Date endDate, int slotId) {
+        this.id = id;
+        this.isSelected = false;
+        this.status = SlotStatusEnum.fromValue(status);
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.slotId = slotId;
+    }
+
     public int getId() {
         return id;
     }

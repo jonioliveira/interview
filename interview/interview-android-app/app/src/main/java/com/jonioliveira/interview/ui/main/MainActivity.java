@@ -168,8 +168,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         mMainViewModel.updateAppVersion(version);
         mMainViewModel.onNavMenuCreated();
         mMainViewModel.updateBtnState(false);
-        getString(R.string.set_availability);
-        mMainViewModel.updateBtnText();
+        mMainViewModel.updateBtnText(getString(R.string.set_availability), getString(R.string.see_availability));
     }
 
     private void setupNavMenu() {

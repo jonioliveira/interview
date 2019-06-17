@@ -64,13 +64,13 @@ public class MainViewModel extends BaseViewModel<MainNavigator> {
         appVersion.set(version);
     }
 
-    public void updateBtnText(String text){
+    public void updateBtnText(String set, String see){
         UserTypeEnum userType = UserTypeEnum.fromValue(getDataManager().getCurrentUserTypeId());
-        String text
         if (userType == UserTypeEnum.INTERVIEWER) {
-
+            btnText.set(set);
+        }else {
+            btnText.set(see);
         }
-        btnText.set(text);
     }
 
     public void updateBtnState(boolean value){

@@ -35,7 +35,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 13;
+        return list.size();
+
     }
 
     public void addItems(List<CalendarItem> repoList) {

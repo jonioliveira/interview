@@ -2,6 +2,7 @@ package com.jonioliveira.interview;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.res.Configuration;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.gsonparserfactory.GsonParserFactory;
@@ -9,6 +10,8 @@ import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 import com.google.gson.Gson;
 import com.jonioliveira.interview.di.component.DaggerAppComponent;
 import com.jonioliveira.interview.utils.AppLogger;
+
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -39,6 +42,12 @@ public class InterviewApp extends Application implements HasActivityInjector {
                 .inject(this);
 
         AppLogger.init();
+
+        Locale locale = new Locale("en_US");
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getApplicationContext().getResources().updateConfiguration(config, null);
 
         AndroidNetworking.initialize(getApplicationContext());
         AndroidNetworking.setParserFactory(new GsonParserFactory(gson));
