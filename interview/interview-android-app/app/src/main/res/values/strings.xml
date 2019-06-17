@@ -34,5 +34,6 @@
     <string name="see_availability">See Availability</string>
     <string name="calendar">Calendar</string>
     <string name="available">Want to set as available?</string>
+    <string name="no_available_slots">No available slot for the day</string>
 
 </resources>
