@@ -1,6 +1,7 @@
 package com.jonioliveira.interview.utils;
 
 import com.jonioliveira.interview.models.Slot;
+import com.jonioliveira.interview.resources.models.response.CountResponse;
 import com.jonioliveira.interview.resources.models.response.SlotResponse;
 
 import java.util.ArrayList;
@@ -17,5 +18,10 @@ public class Mapper {
             slotList.add(new SlotResponse(slot.getId(), slot.getStartDate(), slot.getEndDate(), slot.getInterviewerId(), slot.getCandidateId(), slot.getStatus().getValue()));
         }
         return slotList;
+    }
+
+
+    public static CountResponse toCountResponse(int value){
+        return new CountResponse(value);
     }
 }

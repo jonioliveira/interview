@@ -1,6 +1,7 @@
 package com.jonioliveira.interview.repositories;
 
 import com.jonioliveira.interview.models.Slot;
+
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -20,6 +21,10 @@ public class SlotsRepository implements PanacheRepositoryBase<Slot, Integer> {
 
     public List<Slot> findByDateAndUser(Date date, int id){
         return find("date(startDate) = ?1 and interviewerId = ?2 ", date, id).list();
+    }
+
+    public long countByDate(Date date){
+        return find("date(startDate)", date).count();
     }
 
 

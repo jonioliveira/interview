@@ -10,6 +10,8 @@ import com.jonioliveira.interview.resources.models.request.AddSlotRequest;
 import com.jonioliveira.interview.resources.models.request.GetSlotsByDateAndUserRequest;
 import com.jonioliveira.interview.resources.models.request.GetSlotsByDateRequest;
 import com.jonioliveira.interview.utils.TimeUtils;
+import com.jonioliveira.interview.utils.Utils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,5 +77,9 @@ public class SlotService {
         Slot slot = repository.findById(slotId);
         slot.delete();
         return slot;
+    }
+
+    public int countSlotsForDate(GetSlotsByDateRequest request){
+        return Utils.safeLongToInt(repository.countByDate(request.getDate()));
     }
 }
