@@ -71,7 +71,9 @@ public class SlotService {
     }
 
     @Transactional
-    public void deleteSlot(int slotId){
-        repository.findById(slotId).delete();
+    public Slot deleteSlot(int slotId){
+        Slot slot = repository.findById(slotId);
+        slot.delete();
+        return slot;
     }
 }

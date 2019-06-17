@@ -151,7 +151,7 @@ public class SlotResource {
     @Operation(summary = "Schedule an interview")
     @Tag(name = "Schedule")
     @APIResponses({
-            @APIResponse(responseCode = "200", description = "The slot was deleted", content = @Content(mediaType = "application/json")),
+            @APIResponse(responseCode = "200", description = "The slot was deleted", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SlotResponse.class))),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response scheduleInterview(@RequestBody(description = "Request object",
@@ -190,11 +190,12 @@ public class SlotResource {
 
             LOGGER.info("[MONITORING] | METHOD: DELETE | REQUEST");
 
-            service.deleteSlot(id);
+            Slot slot = service.deleteSlot(id);
+            //error on OpenAPI from quarkus, allways need a content schema to return 
 
             LOGGER.info("[MONITORING] | METHOD: DELETE | RESPONSE | Time: {}ms", System.currentTimeMillis()-startTime);
 
-            return Response.ok().status(200).build();
+            return Response.ok(slot).status(200).build();
         } catch (Exception e) {
             LOGGER.error("METHOD: DELETE | {}", e.getCause(), e);
             throw new WebApplicationException("Add slot error", 500);
