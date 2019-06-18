@@ -41,7 +41,7 @@ public class SlotService {
             checkDifference(request.getStartDate(), request.getEndDate());
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK);
-            if (repository.findByStartDateAndEndDate(format.format(request.getStartDate()), format.format(request.getEndDate())) != 0 ){
+            if (repository.findByStartDateAndEndDateByUser(format.format(request.getStartDate()), format.format(request.getEndDate()), request.getInterviewerId()) != 0 ){
                 throw new FailAddSlotException();
             }
 
