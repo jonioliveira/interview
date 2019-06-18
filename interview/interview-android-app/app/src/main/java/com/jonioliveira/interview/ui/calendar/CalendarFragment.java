@@ -97,6 +97,8 @@ public class CalendarFragment extends BaseFragment<FragmentCalendarBinding, Cale
 
     @Override
     public void handleCalendarRefresh() {
+        calendarAdapter.clearItems();
+        calendarAdapter.addItems(mCalendarViewModel.getCalendarItemsLiveData().getValue());
         calendarAdapter.notifyDataSetChanged();
     }
 

@@ -62,6 +62,7 @@ public class CalendarDialog extends BaseDialog implements CalendarDialogCallback
         binding.setViewModel(mCalendarDialogViewModel);
 
         mCalendarDialogViewModel.setNavigator(this);
+        mCalendarDialogViewModel.setText(getString(R.string.available), getString(R.string.interview));
 
         return view;
     }

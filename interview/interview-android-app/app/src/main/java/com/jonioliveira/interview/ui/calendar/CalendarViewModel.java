@@ -10,6 +10,7 @@ import com.jonioliveira.interview.data.model.CalendarItem;
 import com.jonioliveira.interview.data.model.SlotStatusEnum;
 import com.jonioliveira.interview.data.model.UserTypeEnum;
 import com.jonioliveira.interview.data.model.api.AddSlotRequest;
+import com.jonioliveira.interview.data.model.api.ScheduleSlotRequest;
 import com.jonioliveira.interview.data.model.api.SlotsForDayAndUserRequest;
 import com.jonioliveira.interview.data.model.api.SlotsForDayRequest;
 import com.jonioliveira.interview.data.model.api.SlotsResponse;
@@ -83,22 +84,34 @@ public class CalendarViewModel extends BaseViewModel<CalendarNavigator> implemen
     public void submit(){
         UserTypeEnum userType = UserTypeEnum.fromValue(getDataManager().getCurrentUserTypeId());
 
-        AddSlotRequest[] addSlotRequests = new AddSlotRequest[]{new AddSlotRequest(calendarItem.getStartDate(), calendarItem.getEndDate(), getDataManager().getCurrentUserId())};
         if(userType == UserTypeEnum.INTERVIEWER){
+            AddSlotRequest[] addSlotRequests = new AddSlotRequest[]{new AddSlotRequest(calendarItem.getStartDate(), calendarItem.getEndDate(), getDataManager().getCurrentUserId())};
             getCompositeDisposable().add(getDataManager()
                     .doAddSlotRequest(addSlotRequests)
                     .subscribeOn(getSchedulerProvider().io())
                     .observeOn(getSchedulerProvider().ui())
                     .subscribe(response -> {
                         getNavigator().slotSubmited();
+                        calendarItem.setStatus(SlotStatusEnum.AVAILABLE);
                         setIsLoading(false);
                     }, throwable -> {
                         setIsLoading(false);
                         getNavigator().slotSubmissionError();
                     }));
 
-        }else {
-
+        }else if (userType == UserTypeEnum.CANDIDATE){
+            getCompositeDisposable().add(getDataManager()
+                    .doSheduleSlot(new ScheduleSlotRequest(calendarItem.getSlotId(), getDataManager().getCurrentUserId()))
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribe(response -> {
+                        getNavigator().slotSubmited();
+                        calendarItem.setStatus(SlotStatusEnum.INTERVIEW);
+                        setIsLoading(false);
+                    }, throwable -> {
+                        setIsLoading(false);
+                        getNavigator().slotSubmissionError();
+                    }));
         }
 
         getNavigator().handleCalendarRefresh();
@@ -133,7 +146,7 @@ public class CalendarViewModel extends BaseViewModel<CalendarNavigator> implemen
 
     public void setInterviewerHours(){
         List<CalendarItem> list = getCalendarItemList();
-        calendarItemsLiveData.setValue(list);
+
 
         getCompositeDisposable().add(getDataManager()
                 .doGetSlotsForDayByUser(new SlotsForDayAndUserRequest(calendar.getTime(), getDataManager().getCurrentUserId()))
@@ -147,9 +160,11 @@ public class CalendarViewModel extends BaseViewModel<CalendarNavigator> implemen
                             calendarItem.setStatus(SlotStatusEnum.fromValue(slotsResponse.getStatus()));
                         }
                     }
+                    calendarItemsLiveData.setValue(list);
                     setIsLoading(false);
                     getNavigator().handleCalendarRefresh();
                 }, throwable -> {
+                    calendarItemsLiveData.setValue(list);
                     setIsLoading(false);
                     getNavigator().handleError(throwable);
                 }));
@@ -158,7 +173,7 @@ public class CalendarViewModel extends BaseViewModel<CalendarNavigator> implemen
 
     public void setCandidateHours(){
         List<CalendarItem> list = new ArrayList<CalendarItem>();
-        calendarItemsLiveData.setValue(list);
+
 
         getCompositeDisposable().add(getDataManager()
                 .doGetSlotsForDay(new SlotsForDayRequest(calendar.getTime()))
@@ -171,9 +186,11 @@ public class CalendarViewModel extends BaseViewModel<CalendarNavigator> implemen
                         i++;
                     }
                     setIsLoading(false);
+                    calendarItemsLiveData.setValue(list);
                     getNavigator().handleCalendarRefresh();
                 }, throwable -> {
                     setIsLoading(false);
+                    calendarItemsLiveData.setValue(list);
                     getNavigator().handleError(throwable);
                 }));
     }

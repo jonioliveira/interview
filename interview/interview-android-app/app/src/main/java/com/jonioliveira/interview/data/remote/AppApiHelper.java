@@ -60,7 +60,7 @@ public class AppApiHelper implements ApiHelper {
 
     @Override
     public Single<SlotsResponse> doSheduleSlot(ScheduleSlotRequest request) {
-        return Rx2AndroidNetworking.post(ApiEndPoint.ENDPOINT_SLOTS_SCHEDULE)
+        return Rx2AndroidNetworking.put(ApiEndPoint.ENDPOINT_SLOTS_SCHEDULE)
                 .addApplicationJsonBody(request)
                 .build()
                 .getObjectSingle(SlotsResponse.class);
