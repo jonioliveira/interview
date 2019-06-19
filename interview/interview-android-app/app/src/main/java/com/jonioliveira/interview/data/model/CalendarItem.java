@@ -16,6 +16,8 @@ public class CalendarItem {
 
     private int slotId;
 
+    private String interviewerName;
+
     public CalendarItem(int id, Date startDate, Date endDate) {
         this.id = id;
         this.isSelected = false;
@@ -31,6 +33,16 @@ public class CalendarItem {
         this.startDate = startDate;
         this.endDate = endDate;
         this.slotId = slotId;
+    }
+
+    public CalendarItem(int id, int status, Date startDate, Date endDate, int slotId, String interviewerName) {
+        this.id = id;
+        this.isSelected = false;
+        this.status = SlotStatusEnum.fromValue(status);
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.slotId = slotId;
+        this.interviewerName = interviewerName;
     }
 
     public int getId() {
@@ -79,5 +91,13 @@ public class CalendarItem {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public String getInterviewerName() {
+        return interviewerName;
+    }
+
+    public void setInterviewerName(String interviewerName) {
+        this.interviewerName = interviewerName;
     }
 }

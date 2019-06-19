@@ -7,6 +7,7 @@ import com.jonioliveira.interview.data.model.api.ScheduleSlotRequest;
 import com.jonioliveira.interview.data.model.api.SlotsForDayAndUserRequest;
 import com.jonioliveira.interview.data.model.api.SlotsForDayRequest;
 import com.jonioliveira.interview.data.model.api.SlotsResponse;
+import com.jonioliveira.interview.data.model.api.SlotsWithUserResponse;
 import com.jonioliveira.interview.data.model.api.UserResponse;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public interface ApiHelper {
 
     Single<List<SlotsResponse>> doGetSlotsForDayByUser(SlotsForDayAndUserRequest request);
 
-    Single<List<SlotsResponse>> doGetSlotsForDay(SlotsForDayRequest request);
+    Single<List<SlotsWithUserResponse>> doGetSlotsForDay(SlotsForDayRequest request);
 
     Single<SlotsResponse> doSheduleSlot(ScheduleSlotRequest request);
 

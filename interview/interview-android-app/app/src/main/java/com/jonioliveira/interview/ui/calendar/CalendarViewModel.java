@@ -14,6 +14,7 @@ import com.jonioliveira.interview.data.model.api.ScheduleSlotRequest;
 import com.jonioliveira.interview.data.model.api.SlotsForDayAndUserRequest;
 import com.jonioliveira.interview.data.model.api.SlotsForDayRequest;
 import com.jonioliveira.interview.data.model.api.SlotsResponse;
+import com.jonioliveira.interview.data.model.api.SlotsWithUserResponse;
 import com.jonioliveira.interview.ui.base.BaseViewModel;
 import com.jonioliveira.interview.utils.CollectionUtils;
 import com.jonioliveira.interview.utils.TimeUtils;
@@ -181,8 +182,8 @@ public class CalendarViewModel extends BaseViewModel<CalendarNavigator> implemen
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response -> {
                     int i = 0;
-                    for (SlotsResponse slotsResponse : response) {
-                        list.add(new CalendarItem(i, slotsResponse.getStatus(), slotsResponse.getStartDate(), slotsResponse.getEndDate(), slotsResponse.getId()));
+                    for (SlotsWithUserResponse slotsResponse : response) {
+                        list.add(new CalendarItem(i, slotsResponse.getStatus(), slotsResponse.getStartDate(), slotsResponse.getEndDate(), slotsResponse.getId(), slotsResponse.getInterviewerName()));
                         i++;
                     }
                     setIsLoading(false);

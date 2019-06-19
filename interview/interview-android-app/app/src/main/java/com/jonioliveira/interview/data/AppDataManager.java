@@ -8,6 +8,7 @@ import com.jonioliveira.interview.data.model.api.ScheduleSlotRequest;
 import com.jonioliveira.interview.data.model.api.SlotsForDayAndUserRequest;
 import com.jonioliveira.interview.data.model.api.SlotsForDayRequest;
 import com.jonioliveira.interview.data.model.api.SlotsResponse;
+import com.jonioliveira.interview.data.model.api.SlotsWithUserResponse;
 import com.jonioliveira.interview.data.model.api.UserResponse;
 import com.jonioliveira.interview.data.remote.ApiHelper;
 
@@ -48,7 +49,7 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Single<List<SlotsResponse>> doGetSlotsForDay(SlotsForDayRequest request) {
+    public Single<List<SlotsWithUserResponse>> doGetSlotsForDay(SlotsForDayRequest request) {
         return apiHelper.doGetSlotsForDay(request);
     }
 

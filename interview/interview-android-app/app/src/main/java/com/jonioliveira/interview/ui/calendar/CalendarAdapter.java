@@ -110,7 +110,9 @@ public class CalendarAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         @Override
         public void onBind(int position) {
             calendarItem = list.get(position);
-            String text = calendarItem.getStatus().toString();
+            String interviewerName = calendarItem.getInterviewerName();
+            String status = calendarItem.getStatus().toString();
+            String text = interviewerName != null ? status + ": " + interviewerName.toUpperCase() : status ;
 
             SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
             viewModel = new CalendarItemViewModel(viewBinding.getRoot().getContext(), text, format.format(calendarItem.getStartDate()), this);
