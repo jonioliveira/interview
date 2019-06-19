@@ -1,6 +1,7 @@
 package com.jonioliveira.users;
 
 import com.jonioliveira.users.domain.model.User;
+import com.jonioliveira.users.exception.UserAlreadyExistsException;
 import com.jonioliveira.users.exception.UserNotFoundException;
 import com.jonioliveira.users.exception.UserTypeNotFoundException;
 import com.jonioliveira.users.service.UserService;
@@ -89,7 +90,7 @@ public class UserResourceTest {
             User user = service.addUser("ava", 2);
             Assertions.assertEquals(user.getName(), "ava");
             Assertions.assertEquals(user.getType().getId(), 2);
-        } catch (UserTypeNotFoundException e) {
+        } catch (UserTypeNotFoundException | UserAlreadyExistsException e) {
             Assertions.fail();
         }
     }

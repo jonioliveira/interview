@@ -74,15 +74,15 @@ public class UserResource {
         }
     }
 
-    @POST
+    @GET
     @Path("{id}")
-    @Operation(summary = "Login user in system")
+    @Operation(summary = "Get user from system")
     @APIResponses({
             @APIResponse(responseCode = "201", description = "The user", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
             @APIResponse(responseCode = "404", description = "User not found"),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public Response getUserById(@Parameter int id){
+    public Response getUserById(@Parameter(name = "id", description = "User Id", required = true) @PathParam("id") int id){
         long startTime = System.currentTimeMillis();
         try {
             final User user = service.getUserById(id);
