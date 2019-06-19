@@ -2,12 +2,15 @@ package com.jonioliveira.interview.resources;
 
 import com.jonioliveira.interview.models.Slot;
 import com.jonioliveira.interview.models.SlotStatus;
+import com.jonioliveira.interview.models.User;
 import com.jonioliveira.interview.resources.models.request.AddSlotRequest;
 import com.jonioliveira.interview.resources.models.request.GetSlotsByDateAndUserRequest;
 import com.jonioliveira.interview.resources.models.request.GetSlotsByDateRequest;
 import com.jonioliveira.interview.resources.models.request.ScheduleInterviewRequest;
 import com.jonioliveira.interview.resources.models.response.SlotResponse;
+import com.jonioliveira.interview.resources.models.response.SlotsWithUserResponse;
 import com.jonioliveira.interview.services.SlotService;
+import com.jonioliveira.interview.services.UserService;
 import com.jonioliveira.interview.utils.Constants;
 import com.jonioliveira.interview.utils.Mapper;
 import org.eclipse.microprofile.metrics.MetricUnits;
@@ -22,6 +25,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +40,9 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RequestScoped
 @Path(Constants.slotsResourcePath)
@@ -47,6 +54,10 @@ public class SlotResource {
 
     @Inject
     SlotService service;
+
+    @Inject
+    @RestClient
+    UserService userService;
 
     @POST
     @Timed(name = "add_slot_list", unit = MetricUnits.MILLISECONDS)
@@ -85,7 +96,7 @@ public class SlotResource {
     @Operation(summary = "Get a list of slots from a day")
     @Tag(name = "Get")
     @APIResponses({
-            @APIResponse(responseCode = "201", description = "The slots", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SlotResponse.class, type = SchemaType.ARRAY))),
+            @APIResponse(responseCode = "200", description = "The slots", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SlotsWithUserResponse.class, type = SchemaType.ARRAY))),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
     public Response getByDate(@RequestBody(description = "Request object",
@@ -102,9 +113,15 @@ public class SlotResource {
 
             LOGGER.info("SIZE: {}", slotsList.size());
 
+            Map<Integer, User> userMap = slotsList.stream()
+                    .map(Slot::getInterviewerId)
+                    .distinct()
+                    .map(i -> userService.getUserById(i))
+                    .collect(Collectors.toMap(User::getId, Function.identity()));
+
             LOGGER.info("[MONITORING] | METHOD: GET SLOTS BY DATE | RESPONSE | Time: {}ms", System.currentTimeMillis()-startTime);
 
-            return Response.ok(Mapper.toSlotResponse(slotsList)).status(200).build();
+            return Response.ok(Mapper.toSlotWithUserResponse(slotsList, userMap)).status(200).build();
         } catch (Exception e) {
             LOGGER.error("METHOD: GET SLOTS BY DATE | {}", e.getCause(), e);
             throw new WebApplicationException("Get slots by date " + e.getCause().getMessage(), 500);
