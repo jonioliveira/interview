@@ -5,11 +5,14 @@ import com.jonioliveira.users.exception.UserAlreadyExistsException;
 import com.jonioliveira.users.exception.UserNotFoundException;
 import com.jonioliveira.users.exception.UserTypeNotFoundException;
 import com.jonioliveira.users.service.UserService;
+import com.jonioliveira.users.utils.Mapper;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.core.MediaType;
 
 import static io.restassured.RestAssured.given;
@@ -24,17 +27,17 @@ public class UserResourceTest {
 
     @Test
     public void testAddUser() {
-        String s = "{\"name\":\"John\", \"type\":\"1\"}";
+        String s = "{\"name\":\"user1\", \"type\":\"1\"}";
         with().body(s)
         .contentType(MediaType.APPLICATION_JSON)
           .when().post("/v1/user")
           .then()
-             .statusCode(201).body(is("{\"id\":1,\"name\":\"john\",\"type\":{\"id\":1,\"name\":\"interview\"}}"));
+             .statusCode(201).body(is("{\"id\":1,\"name\":\"user1\",\"type\":1}"));
     }
 
     @Test
     public void testAddUserNoType() {
-        String s = "{\"name\":\"John\", \"type\":\"4\"}";
+        String s = "{\"name\":\"user2\", \"type\":\"4\"}";
         with().body(s)
                 .contentType(MediaType.APPLICATION_JSON)
                 .when().post("/v1/user")
@@ -52,14 +55,14 @@ public class UserResourceTest {
 
     @Test
     public void testLogin() {
-        String s = "{\"name\":\"ava\", \"type\":\"2\"}";
+        String s = "{\"name\":\"user3\", \"type\":\"2\"}";
         with().body(s)
                 .contentType(MediaType.APPLICATION_JSON)
                 .when().post("/v1/user")
                 .then()
                 .statusCode(201);
 
-        String s2 = "{\"name\":\"ava\"}";
+        String s2 = "{\"name\":\"user3\"}";
         with().body(s2)
                 .contentType(MediaType.APPLICATION_JSON)
                 .when().post("/v1/user/login")
@@ -69,14 +72,7 @@ public class UserResourceTest {
 
     @Test
     public void testLoginFail() {
-        String s = "{\"name\":\"ava\", \"type\":\"2\"}";
-        with().body(s)
-                .contentType(MediaType.APPLICATION_JSON)
-                .when().post("/v1/user")
-                .then()
-                .statusCode(201);
-
-        String s2 = "{\"name\":\"jhon\"}";
+        String s2 = "{\"name\":\"user4\"}";
         with().body(s2)
                 .contentType(MediaType.APPLICATION_JSON)
                 .when().post("/v1/user/login")
@@ -85,10 +81,39 @@ public class UserResourceTest {
     }
 
     @Test
+    public void testGetUser() {
+        try {
+            User user = service.addUser("user6", 1);
+
+            Jsonb jsonb = JsonbBuilder.create();
+            String json = jsonb.toJson(Mapper.userToUserResponse(user));
+
+            given().contentType(MediaType.APPLICATION_JSON)
+                    .when().get("/v1/user/"+user.getId())
+                    .then()
+                    .statusCode(200)
+                    .body(is(json));
+
+        } catch (UserTypeNotFoundException | UserAlreadyExistsException e) {
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    public void testGetUserFail() {
+        given().contentType(MediaType.APPLICATION_JSON)
+                .when().get("/v1/user/123")
+                .then()
+                .statusCode(404);
+    }
+
+
+
+    @Test
     public void userServiceAddUser(){
         try {
-            User user = service.addUser("ava", 2);
-            Assertions.assertEquals(user.getName(), "ava");
+            User user = service.addUser("user7", 2);
+            Assertions.assertEquals(user.getName(), "user7");
             Assertions.assertEquals(user.getType().getId(), 2);
         } catch (UserTypeNotFoundException | UserAlreadyExistsException e) {
             Assertions.fail();
@@ -96,13 +121,64 @@ public class UserResourceTest {
     }
 
     @Test
-    public void userServiceLogin(){
+    public void userServiceAddUserFailExists(){
         try {
-            User user = service.login("ava");
-            Assertions.assertEquals(user.getName(), "ava");
+            User user = service.addUser("user8", 2);
+            Assertions.assertEquals(user.getName(), "user8");
             Assertions.assertEquals(user.getType().getId(), 2);
-        } catch (UserNotFoundException e) {
+        } catch (UserTypeNotFoundException | UserAlreadyExistsException e) {
             Assertions.fail();
         }
+
+        Assertions.assertThrows(UserAlreadyExistsException.class, () -> {
+            service.addUser("user8", 2);
+        });
+    }
+
+    @Test
+    public void userServiceAddUserFailType(){
+        Assertions.assertThrows(UserTypeNotFoundException.class, () -> {
+            service.addUser("user9", 35);
+        });
+    }
+
+    @Test
+    public void userServiceLogin(){
+        try {
+            service.addUser("user9", 2);
+            User user = service.login("user9");
+            Assertions.assertEquals(user.getName(), "user9");
+            Assertions.assertEquals(user.getType().getId(), 2);
+        } catch (UserNotFoundException | UserTypeNotFoundException | UserAlreadyExistsException e) {
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    public void userServiceLoginFail(){
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            service.login("ze");
+        });
+    }
+
+    @Test
+    public void userServiceGetById(){
+        try {
+            User create = service.addUser("user10", 2);
+
+            User user = service.getUserById(create.getId());
+            Assertions.assertEquals(user.getName(), create.getName());
+            Assertions.assertEquals(user.getId(), create.getId());
+            Assertions.assertEquals(user.getType().getId(), create.getType().getId());
+        } catch (UserNotFoundException | UserTypeNotFoundException | UserAlreadyExistsException e) {
+            Assertions.fail();
+        }
+    }
+
+    @Test
+    public void userServiceGetByIdFail(){
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            service.getUserById(123);
+        });
     }
 }
