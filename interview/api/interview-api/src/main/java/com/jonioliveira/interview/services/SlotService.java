@@ -5,15 +5,10 @@ import com.jonioliveira.interview.exceptions.SlotsNotFoundException;
 import com.jonioliveira.interview.exceptions.TimeErrorException;
 import com.jonioliveira.interview.models.Slot;
 import com.jonioliveira.interview.models.SlotStatus;
-import com.jonioliveira.interview.models.User;
 import com.jonioliveira.interview.repositories.SlotsRepository;
 import com.jonioliveira.interview.resources.models.request.AddSlotRequest;
 import com.jonioliveira.interview.resources.models.request.GetSlotsByDateAndUserRequest;
 import com.jonioliveira.interview.resources.models.request.GetSlotsByDateRequest;
-import com.jonioliveira.interview.utils.TimeUtils;
-import com.jonioliveira.interview.utils.Utils;
-
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,10 +16,12 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
-import static com.jonioliveira.interview.utils.TimeUtils.*;
+import static com.jonioliveira.interview.utils.TimeUtils.checkDifference;
 import static com.jonioliveira.interview.utils.TimeUtils.checkMinutesAndSeconds;
 
 @ApplicationScoped
@@ -80,9 +77,5 @@ public class SlotService {
         Slot slot = repository.findById(slotId);
         slot.delete();
         return slot;
-    }
-
-    public int countSlotsForDate(GetSlotsByDateRequest request){
-        return Utils.safeLongToInt(repository.countByDate(request.getDate()));
     }
 }

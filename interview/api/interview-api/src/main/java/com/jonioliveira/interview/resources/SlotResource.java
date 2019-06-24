@@ -130,37 +130,6 @@ public class SlotResource {
     }
 
     @POST
-    @Path("/date/count")
-    @Timed(name = "count_slots_by_date", unit = MetricUnits.MILLISECONDS)
-    @Counted(name = "count_slots_by_date_count", monotonic = true)
-    @Operation(summary = "Count slots from a day")
-    @Tag(name = "Get")
-    @APIResponses({
-            @APIResponse(responseCode = "201", description = "The slots count", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Integer.class))),
-            @APIResponse(responseCode = "500", description = "Internal Server Error")
-    })
-    public Response countByDate(@RequestBody(description = "Request object",
-            required = true,
-            content = @Content(schema = @Schema(implementation = GetSlotsByDateRequest.class)))
-                                  @Valid GetSlotsByDateRequest request){
-
-        try {
-            long startTime = System.currentTimeMillis();
-
-            LOGGER.info("[MONITORING] | METHOD: COUNT SLOTS BY DATE | REQUEST -> Date: {}", request.getDate());
-
-            int count= service.countSlotsForDate(request);
-
-            LOGGER.info("[MONITORING] | METHOD: COUNT SLOTS BY DATE | RESPONSE | Time: {}ms", System.currentTimeMillis()-startTime);
-
-            return Response.ok(Mapper.toCountResponse(count)).status(200).build();
-        } catch (Exception e) {
-            LOGGER.error("METHOD: COUNT SLOTS BY DATE | {}", e.getCause(), e);
-            throw new WebApplicationException("Count slots by date " + e.getCause().getMessage(), 500);
-        }
-    }
-
-    @POST
     @Path("/dateuser")
     @Timed(name = "get_slots_by_date_and_user", unit = MetricUnits.MILLISECONDS)
     @Counted(name = "get_slots_by_date_and_user_count", monotonic = true)
