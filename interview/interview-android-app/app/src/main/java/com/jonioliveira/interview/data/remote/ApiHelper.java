@@ -25,8 +25,10 @@ public interface ApiHelper {
 
     Single<List<SlotsWithUserResponse>> doGetSlotsForDay(SlotsForDayRequest request);
 
-    Single<SlotsResponse> doSheduleSlot(ScheduleSlotRequest request);
+    Single<SlotsResponse> doScheduleSlot(ScheduleSlotRequest request);
 
     Single<List<SlotsResponse>> doAddSlotRequest(AddSlotRequest[] request);
+
+    Single<SlotsResponse> doSlotDelete(int id);
 
 }

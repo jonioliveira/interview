@@ -54,13 +54,18 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Single<SlotsResponse> doSheduleSlot(ScheduleSlotRequest request) {
-        return apiHelper.doSheduleSlot(request);
+    public Single<SlotsResponse> doScheduleSlot(ScheduleSlotRequest request) {
+        return apiHelper.doScheduleSlot(request);
     }
 
     @Override
     public Single<List<SlotsResponse>> doAddSlotRequest(AddSlotRequest[] request) {
         return apiHelper.doAddSlotRequest(request);
+    }
+
+    @Override
+    public Single<SlotsResponse> doSlotDelete(int id) {
+        return apiHelper.doSlotDelete(id);
     }
 
     @Override

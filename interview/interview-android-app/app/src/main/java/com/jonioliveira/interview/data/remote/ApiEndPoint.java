@@ -10,6 +10,8 @@ public final class ApiEndPoint {
 
     public static final String ENDPOINT_SLOTS_ADD = BuildConfig.INTERVIEW_URL + "/v1/slots";
 
+    public static final String ENDPOINT_SLOTS_DELETE = BuildConfig.INTERVIEW_URL + "/v1/slots/";
+
     public static final String ENDPOINT_SLOTS_SCHEDULE = BuildConfig.INTERVIEW_URL + "/v1/slots/schedule";
 
     public static final String ENDPOINT_SLOTS_GET_DATE = BuildConfig.INTERVIEW_URL + "/v1/slots/date";

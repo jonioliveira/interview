@@ -35,6 +35,8 @@
     <string name="calendar">Calendar</string>
     <string name="available">Want to set as available?</string>
     <string name="no_available_slots">No available slot for the day</string>
-    <string name="interview">Want to schedule Interview</string>
+    <string name="interview">Want to schedule interview?</string>
+    <string name="delete">Want to delete slot?</string>
+    <string name="login_btn">Login</string>
 
 </resources>

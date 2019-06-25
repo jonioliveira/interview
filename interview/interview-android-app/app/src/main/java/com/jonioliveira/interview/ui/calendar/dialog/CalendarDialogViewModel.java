@@ -27,11 +27,7 @@ public class CalendarDialogViewModel extends BaseViewModel<CalendarDialogCallbac
         getNavigator().onSubmit();
     }
 
-    public void setText(String available, String interview){
-        if (UserTypeEnum.fromValue(getDataManager().getCurrentUserTypeId()) == UserTypeEnum.INTERVIEWER) {
-            dialogText.set(available);
-        } else {
-            dialogText.set(interview);
-        }
+    public void setText(String text){
+        dialogText.set(text);
     }
 }

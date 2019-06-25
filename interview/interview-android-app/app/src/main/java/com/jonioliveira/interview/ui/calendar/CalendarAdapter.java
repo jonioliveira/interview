@@ -124,15 +124,13 @@ public class CalendarAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
         @Override
         public void onItemClick() {
-            if(calendarItem.getStatus() != SlotStatusEnum.INTERVIEW){
-                listener.onItemSelected(calendarItem);
-                if(calendarItem.isSelected()){
-                    calendarItem.setSelected(false);
-                    viewModel.setBackground(calendarItem.getStatus(), false);
-                }
-                calendarItem.setSelected(true);
-                viewModel.setBackground(calendarItem.getStatus(), true);
+            listener.onItemSelected(calendarItem);
+            if(calendarItem.isSelected()){
+                calendarItem.setSelected(false);
+                viewModel.setBackground(calendarItem.getStatus(), false);
             }
+            calendarItem.setSelected(true);
+            viewModel.setBackground(calendarItem.getStatus(), true);
         }
     }
 }

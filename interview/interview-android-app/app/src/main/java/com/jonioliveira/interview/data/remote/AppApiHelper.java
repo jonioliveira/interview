@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Single;
+import okhttp3.MediaType;
 
 @Singleton
 public class AppApiHelper implements ApiHelper {
@@ -60,7 +61,7 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Single<SlotsResponse> doSheduleSlot(ScheduleSlotRequest request) {
+    public Single<SlotsResponse> doScheduleSlot(ScheduleSlotRequest request) {
         return Rx2AndroidNetworking.put(ApiEndPoint.ENDPOINT_SLOTS_SCHEDULE)
                 .addApplicationJsonBody(request)
                 .build()
@@ -73,5 +74,12 @@ public class AppApiHelper implements ApiHelper {
                 .addApplicationJsonBody(request)
                 .build()
                 .getObjectListSingle(SlotsResponse.class);
+    }
+
+    @Override
+    public Single<SlotsResponse> doSlotDelete(int id) {
+        return Rx2AndroidNetworking.delete(ApiEndPoint.ENDPOINT_SLOTS_DELETE+id)
+                .build()
+                .getObjectSingle(SlotsResponse.class);
     }
 }

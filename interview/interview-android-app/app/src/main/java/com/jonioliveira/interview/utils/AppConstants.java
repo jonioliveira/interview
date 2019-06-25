@@ -12,6 +12,10 @@ public final class AppConstants {
 
     public static final String DAY_OF_MONTH = "DAY_OF_MONTH";
 
+    public static final String DIALOG_TEXT = "DIALOG_TEXT";
+
+
+
     private AppConstants() {
         // This utility class is not publicly instantiable
     }

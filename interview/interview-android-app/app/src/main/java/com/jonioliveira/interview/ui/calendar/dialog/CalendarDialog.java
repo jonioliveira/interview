@@ -14,6 +14,9 @@ import com.jonioliveira.interview.R;
 import com.jonioliveira.interview.ViewModelProviderFactory;
 import com.jonioliveira.interview.databinding.DialogCalendarBinding;
 import com.jonioliveira.interview.ui.base.BaseDialog;
+import com.jonioliveira.interview.utils.AppConstants;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -33,9 +36,10 @@ public class CalendarDialog extends BaseDialog implements CalendarDialogCallback
 
     private Listener listener;
 
-    public static CalendarDialog newInstance() {
+    public static CalendarDialog newInstance(String text) {
         CalendarDialog fragment = new CalendarDialog();
         Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.DIALOG_TEXT, text);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -62,7 +66,7 @@ public class CalendarDialog extends BaseDialog implements CalendarDialogCallback
         binding.setViewModel(mCalendarDialogViewModel);
 
         mCalendarDialogViewModel.setNavigator(this);
-        mCalendarDialogViewModel.setText(getString(R.string.available), getString(R.string.interview));
+        mCalendarDialogViewModel.setText(Objects.requireNonNull(getArguments()).getString(AppConstants.DIALOG_TEXT));
 
         return view;
     }

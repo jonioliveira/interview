@@ -4,7 +4,6 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.gson.JsonArray;
 import com.jonioliveira.interview.data.DataManager;
 import com.jonioliveira.interview.data.model.CalendarItem;
 import com.jonioliveira.interview.data.model.SlotStatusEnum;
@@ -16,15 +15,14 @@ import com.jonioliveira.interview.data.model.api.SlotsForDayRequest;
 import com.jonioliveira.interview.data.model.api.SlotsResponse;
 import com.jonioliveira.interview.data.model.api.SlotsWithUserResponse;
 import com.jonioliveira.interview.ui.base.BaseViewModel;
+import com.jonioliveira.interview.ui.calendar.dialog.CalendarItemClickType;
 import com.jonioliveira.interview.utils.CollectionUtils;
 import com.jonioliveira.interview.utils.TimeUtils;
 import com.jonioliveira.interview.utils.rx.SchedulerProvider;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 public class CalendarViewModel extends BaseViewModel<CalendarNavigator> implements CalendarAdapter.CalendarAdapterListener {
 
@@ -79,43 +77,83 @@ public class CalendarViewModel extends BaseViewModel<CalendarNavigator> implemen
     @Override
     public void onItemSelected(CalendarItem calendarItem) {
         this.calendarItem = calendarItem;
-        getNavigator().add();
+
+        if (getDataManager().getCurrentUserTypeId() == UserTypeEnum.INTERVIEWER.getValue()){
+            if(calendarItem.getStatus() == SlotStatusEnum.FREE){
+                getNavigator().add(CalendarItemClickType.AVAILABLE);
+            }else {
+                getNavigator().add(CalendarItemClickType.DELETE_AVAILABLE);
+            }
+        } else {
+            if (calendarItem.getStatus() == SlotStatusEnum.AVAILABLE) {
+                getNavigator().add(CalendarItemClickType.INTERVIEW);
+            } else {
+                calendarItem.setSelected(false);
+                getNavigator().handleCalendarRefresh();
+            }
+        }
     }
 
     public void submit(){
         UserTypeEnum userType = UserTypeEnum.fromValue(getDataManager().getCurrentUserTypeId());
 
         if(userType == UserTypeEnum.INTERVIEWER){
-            AddSlotRequest[] addSlotRequests = new AddSlotRequest[]{new AddSlotRequest(calendarItem.getStartDate(), calendarItem.getEndDate(), getDataManager().getCurrentUserId())};
-            getCompositeDisposable().add(getDataManager()
-                    .doAddSlotRequest(addSlotRequests)
-                    .subscribeOn(getSchedulerProvider().io())
-                    .observeOn(getSchedulerProvider().ui())
-                    .subscribe(response -> {
-                        getNavigator().slotSubmited();
-                        calendarItem.setStatus(SlotStatusEnum.AVAILABLE);
-                        setIsLoading(false);
-                    }, throwable -> {
-                        setIsLoading(false);
-                        getNavigator().slotSubmissionError();
-                    }));
-
+            if (calendarItem.getStatus() != SlotStatusEnum.FREE) {
+                deleteRequest();
+            }else {
+                addRequest();
+            }
         }else if (userType == UserTypeEnum.CANDIDATE){
-            getCompositeDisposable().add(getDataManager()
-                    .doSheduleSlot(new ScheduleSlotRequest(calendarItem.getSlotId(), getDataManager().getCurrentUserId()))
-                    .subscribeOn(getSchedulerProvider().io())
-                    .observeOn(getSchedulerProvider().ui())
-                    .subscribe(response -> {
-                        getNavigator().slotSubmited();
-                        calendarItem.setStatus(SlotStatusEnum.INTERVIEW);
-                        setIsLoading(false);
-                    }, throwable -> {
-                        setIsLoading(false);
-                        getNavigator().slotSubmissionError();
-                    }));
+            interviewRequest();
         }
 
         getNavigator().handleCalendarRefresh();
+    }
+
+    private void interviewRequest() {
+        getCompositeDisposable().add(getDataManager()
+                .doScheduleSlot(new ScheduleSlotRequest(calendarItem.getSlotId(), getDataManager().getCurrentUserId()))
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(response -> {
+                    getNavigator().slotSubmited();
+                    calendarItem.setStatus(SlotStatusEnum.INTERVIEW);
+                    setIsLoading(false);
+                }, throwable -> {
+                    setIsLoading(false);
+                    getNavigator().slotSubmissionError();
+                }));
+    }
+
+    private void addRequest() {
+        AddSlotRequest[] addSlotRequests = new AddSlotRequest[]{new AddSlotRequest(calendarItem.getStartDate(), calendarItem.getEndDate(), getDataManager().getCurrentUserId())};
+        getCompositeDisposable().add(getDataManager()
+                .doAddSlotRequest(addSlotRequests)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(response -> {
+                    getNavigator().slotSubmited();
+                    calendarItem.setStatus(SlotStatusEnum.AVAILABLE);
+                    calendarItem.setSlotId(response.get(0).getId());
+                    setIsLoading(false);
+                }, throwable -> {
+                    setIsLoading(false);
+                    getNavigator().slotSubmissionError();
+                }));
+    }
+
+    private void deleteRequest() {
+        getCompositeDisposable().add(getDataManager()
+                .doSlotDelete(calendarItem.getSlotId())
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(response -> {
+                    setIsLoading(false);
+                    getNavigator().slotSubmited();
+                }, throwable -> {
+                    setIsLoading(false);
+                    getNavigator().slotSubmissionError();
+                }));
     }
 
     public void refresh(){

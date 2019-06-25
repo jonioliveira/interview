@@ -17,6 +17,7 @@ import com.jonioliveira.interview.ViewModelProviderFactory;
 import com.jonioliveira.interview.databinding.FragmentCalendarBinding;
 import com.jonioliveira.interview.ui.base.BaseFragment;
 import com.jonioliveira.interview.ui.calendar.dialog.CalendarDialog;
+import com.jonioliveira.interview.ui.calendar.dialog.CalendarItemClickType;
 import com.jonioliveira.interview.utils.AppConstants;
 import com.jonioliveira.interview.utils.AppLogger;
 
@@ -72,8 +73,21 @@ public class CalendarFragment extends BaseFragment<FragmentCalendarBinding, Cale
     }
 
     @Override
-    public void add() {
-        CalendarDialog calendarDialog = CalendarDialog.newInstance();
+    public void add(CalendarItemClickType type) {
+        String text = "";
+        switch (type){
+            case DELETE_AVAILABLE:
+                text = getString(R.string.delete);
+                break;
+            case AVAILABLE:
+                text = getString(R.string.available);
+                break;
+            case INTERVIEW:
+                text = getString(R.string.interview);
+                break;
+        }
+
+        CalendarDialog calendarDialog = CalendarDialog.newInstance(text);
         calendarDialog.setListener(this);
         calendarDialog.show(getFragmentManager());
     }

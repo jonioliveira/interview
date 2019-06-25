@@ -86,7 +86,7 @@
                         android:layout_margin="15dp"
                         android:onClick="@{() -> viewModel.onServerLoginClick()}"
                         android:padding="10dp"
-                        android:text="@string/login"
+                        android:text="@string/login_btn"
                         android:textSize="18sp" />
 
                     <Button
