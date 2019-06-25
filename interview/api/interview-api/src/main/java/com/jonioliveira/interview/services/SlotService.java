@@ -65,16 +65,16 @@ public class SlotService {
     }
 
     @Transactional
-    public Slot updateSlotStatus(int slotId, int candidateId, SlotStatus status) {
-        Slot slot = repository.findById(slotId);
+    public Slot updateSlotStatus(int slotId, int candidateId, SlotStatus status) throws SlotsNotFoundException {
+        Slot slot = Optional.ofNullable(repository.findById(slotId)).orElseThrow(SlotsNotFoundException::new);
         slot.setCandidateId(candidateId);
         slot.setStatus(status);
         return slot;
     }
 
     @Transactional
-    public Slot deleteSlot(int slotId){
-        Slot slot = repository.findById(slotId);
+    public Slot deleteSlot(int slotId) throws SlotsNotFoundException {
+        Slot slot = Optional.ofNullable(repository.findById(slotId)).orElseThrow(SlotsNotFoundException::new);
         slot.delete();
         return slot;
     }

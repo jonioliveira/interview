@@ -126,7 +126,7 @@ public class UserResource {
                 code = ((WebApplicationException) exception).getResponse().getStatus();
             }
             return Response.status(code)
-                    .entity(Json.createObjectBuilder().add("error", exception.getMessage()).add("code", code).build())
+                    .entity(Json.createObjectBuilder().add("error", (exception.getMessage() == null ? "" : exception.getMessage())).add("code", code).build())
                     .build();
         }
     }

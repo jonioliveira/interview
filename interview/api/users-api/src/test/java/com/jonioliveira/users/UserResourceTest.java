@@ -52,7 +52,7 @@ public class UserResourceTest {
          given().contentType(MediaType.APPLICATION_JSON)
                 .post("/v1/user")
                 .then()
-                .statusCode(405);
+                .statusCode(500);
     }
 
     @Test

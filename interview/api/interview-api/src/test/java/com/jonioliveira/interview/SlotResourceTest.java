@@ -5,34 +5,18 @@ import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.MediaType;
 
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjuster;
-import java.time.temporal.TemporalAdjusters;
-
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
+import static io.restassured.RestAssured.when;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
 
 @QuarkusTest
 public class SlotResourceTest {
 
     @Test
-    public void testResourceEndpoint() {
-
-        LocalDateTime ldtStart = LocalDateTime.now().
-                with(TemporalAdjusters.next(DayOfWeek.MONDAY))
-                .withHour(11)
-                .withMinute(0)
-                .withSecond(0);
-
-        LocalDateTime ldtEnd = LocalDateTime.now().
-                with(TemporalAdjusters.next(DayOfWeek.MONDAY))
-                .withHour(10)
-                .withMinute(0)
-                .withSecond(0);
-
-        String s = "[{\"endDate\": \""+ aux +"\",\n" +
-                "    \"interviewerId\": \"1\",\n" +
+    public void testResourceAddSlotSuccess() {
+        String s = "[{\"endDate\": \"2019-08-10 11:00:00\"," +
+                "    \"interviewerId\": \"1\"," +
                 "    \"startDate\": \"2019-08-10 10:00:00\"}]";
 
         given().contentType(MediaType.APPLICATION_JSON)
@@ -40,7 +24,114 @@ public class SlotResourceTest {
                 .when().post("/v1/slots")
                 .then()
                 .statusCode(201)
-                .body(is(""));
+                .body("interviewerId", hasItem(1))
+                .body("startDate", hasItem("2019-08-10 10:00:00"))
+                .body("endDate", hasItem("2019-08-10 11:00:00"))
+                .body("status", hasItem(1));
     }
 
+    @Test
+    public void testResourceAddSlotFail() {
+        String s = "[{\"endDate\": \"2019-08-10 11:00:00\"," +
+                "    \"interviewerId\": \"2\"," +
+                "    \"startDate\": \"2019-08-10 10:00:00\"}]";
+
+        given().contentType(MediaType.APPLICATION_JSON)
+                .body(s)
+                .when().post("/v1/slots")
+                .then()
+                .statusCode(500);
+        
+    }
+
+    @Test
+    public void testResourceGetByDateSuccess(){
+        String s = "{\"date\":\"2019-08-10 10:00:00\"}";
+
+        given().contentType(MediaType.APPLICATION_JSON)
+                .body(s)
+                .when().post("/v1/slots/date")
+                .then()
+                .statusCode(200)
+                .body("interviewerId", hasItem(1))
+                .body("startDate", hasItem("2019-08-10 10:00:00"))
+                .body("endDate", hasItem("2019-08-10 11:00:00"))
+                .body("status", hasItem(1));
+    }
+
+    @Test
+    public void testResourceGetByDateFail(){
+        String s = "{\"date\":\"2019-12-05 10:00:00\"}";
+
+        given().contentType(MediaType.APPLICATION_JSON)
+                .body(s)
+                .when().post("/v1/slots/date")
+                .then()
+                .statusCode(500);
+    }
+
+    @Test
+    public void testResourceGetByDateAndUserSuccess(){
+        String s = "{\"date\":\"2019-08-10 10:00:00\", \"userId\":\"1\"}";
+
+        given().contentType(MediaType.APPLICATION_JSON)
+                .body(s)
+                .when().post("/v1/slots/dateuser")
+                .then()
+                .body("interviewerId", hasItem(1))
+                .body("startDate", hasItem("2019-08-10 10:00:00"))
+                .body("endDate", hasItem("2019-08-10 11:00:00"))
+                .body("status", hasItem(1));
+    }
+
+    @Test
+    public void testResourceGetByDateAndUserFail(){
+        String s = "{\"date\":\"2019-12-05 10:00:00\", \"userId\":\"2\"}";
+
+        given().contentType(MediaType.APPLICATION_JSON)
+                .body(s)
+                .when().post("/v1/slots/dateuser")
+                .then()
+                .statusCode(500);
+    }
+
+    @Test
+    public void testResourceScheduleInterviewSuccess(){
+        String s = "{\"candidateId\": \"2\", \"slotId\": \"1\"}";
+
+        given().contentType(MediaType.APPLICATION_JSON)
+                .body(s)
+                .when().put("/v1/slots/schedule")
+                .then()
+                .body("candidateId", equalTo(2))
+                .body("status", equalTo(2))
+                .statusCode(200);
+    }
+
+    @Test
+    public void testResourceScheduleInterviewFail(){
+        String s = "{\"candidateId\": \"2\", \"slotId\": \"3\"}";
+
+        given().contentType(MediaType.APPLICATION_JSON)
+                .body(s)
+                .when().put("/v1/slots/schedule")
+                .then()
+                .statusCode(500);
+    }
+
+    @Test
+    public void testResourceDeleteSuccess(){
+        given().contentType(MediaType.APPLICATION_JSON)
+                .delete("/v1/slots/1")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    public void testResourceDeleteFail(){
+        given().contentType(MediaType.APPLICATION_JSON)
+                .delete("/v1/slots/2")
+                .then()
+                .statusCode(500);
+    }
 }

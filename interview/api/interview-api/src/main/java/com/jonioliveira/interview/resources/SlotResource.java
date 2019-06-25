@@ -46,7 +46,6 @@ import java.util.stream.Collectors;
 
 @RequestScoped
 @Path(Constants.slotsResourcePath)
-@Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class SlotResource {
 
@@ -60,6 +59,7 @@ public class SlotResource {
     UserService userService;
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Timed(name = "add_slot_list", unit = MetricUnits.MILLISECONDS)
     @Counted(name = "add_slot_list_count", monotonic = true)
     @Operation(summary = "Add a list of slots to system")
@@ -78,7 +78,7 @@ public class SlotResource {
 
             LOGGER.info("[MONITORING] | METHOD: ADD SLOTS LIST | REQUEST");
 
-            List<Slot> slotsList= service.addSlotList(request);
+            List<Slot> slotsList = service.addSlotList(request);
 
             LOGGER.info("[MONITORING] | METHOD: ADD SLOTS LIST | RESPONSE | Time: {}ms", System.currentTimeMillis()-startTime);
 
@@ -90,6 +90,7 @@ public class SlotResource {
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/date")
     @Timed(name = "get_slots_by_date", unit = MetricUnits.MILLISECONDS)
     @Counted(name = "get_slots_by_date_count", monotonic = true)
@@ -130,6 +131,7 @@ public class SlotResource {
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/dateuser")
     @Timed(name = "get_slots_by_date_and_user", unit = MetricUnits.MILLISECONDS)
     @Counted(name = "get_slots_by_date_and_user_count", monotonic = true)
@@ -148,7 +150,7 @@ public class SlotResource {
 
             LOGGER.info("[MONITORING] | METHOD: GET SLOTS BY DATE AND USER| REQUEST -> Date: {} User: {}", request.getDate(), request.getUserId());
 
-            ArrayList<Slot> slotsList= (ArrayList<Slot>) service.getSlotsByDateAndUser(request);
+            List<Slot> slotsList= service.getSlotsByDateAndUser(request);
 
             LOGGER.info("SIZE: {}", slotsList.size());
 
@@ -162,6 +164,7 @@ public class SlotResource {
     }
 
     @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/schedule")
     @Timed(name = "schedule_interview", unit = MetricUnits.MILLISECONDS)
     @Counted(name = "schedule_interview_count", monotonic = true)
@@ -192,7 +195,7 @@ public class SlotResource {
     }
 
     @DELETE
-    @Path("/{id}")
+    @Path("{id}")
     @Timed(name = "delete_slot", unit = MetricUnits.MILLISECONDS)
     @Counted(name = "delete_slot_count", monotonic = true)
     @Operation(summary = "Delete a Slot")
@@ -201,18 +204,17 @@ public class SlotResource {
             @APIResponse(responseCode = "200", description = "The slot of interview", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SlotResponse.class))),
             @APIResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public Response delete(@Parameter int id){
+    public Response delete(@Parameter(name = "id", description = "Slot Id", required = true) @PathParam("id") int id){
         try {
             long startTime = System.currentTimeMillis();
 
             LOGGER.info("[MONITORING] | METHOD: DELETE | REQUEST");
-
             Slot slot = service.deleteSlot(id);
             //error on OpenAPI from quarkus, allways need a content schema to return 
 
             LOGGER.info("[MONITORING] | METHOD: DELETE | RESPONSE | Time: {}ms", System.currentTimeMillis()-startTime);
 
-            return Response.ok(slot).status(200).build();
+            return Response.ok(Mapper.toSlotResponse(slot)).status(200).build();
         } catch (Exception e) {
             LOGGER.error("METHOD: DELETE | {}", e.getCause(), e);
             throw new WebApplicationException("Add slot error", 500);
@@ -229,7 +231,7 @@ public class SlotResource {
                 code = ((WebApplicationException) exception).getResponse().getStatus();
             }
             return Response.status(code)
-                    .entity(Json.createObjectBuilder().add("error", exception.getMessage()).add("code", code).build())
+                    .entity(Json.createObjectBuilder().add("error", (exception.getMessage() == null ? "" : exception.getMessage())).add("code", code).build())
                     .build();
         }
     }

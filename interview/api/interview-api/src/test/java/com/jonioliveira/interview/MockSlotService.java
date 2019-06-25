@@ -11,8 +11,8 @@ import com.jonioliveira.interview.resources.models.request.GetSlotsByDateRequest
 import com.jonioliveira.interview.services.SlotService;
 import io.quarkus.test.Mock;
 
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static com.jonioliveira.interview.utils.TimeUtils.checkDifference;
 import static com.jonioliveira.interview.utils.TimeUtils.checkMinutesAndSeconds;
@@ -31,28 +31,55 @@ public class MockSlotService extends SlotService {
                 throw new FailAddSlotException();
             }
 
-            if (request.getStartDate().after())
+            return Collections.singletonList(new Slot(request.getStartDate(), request.getEndDate(), request.getInterviewerId(), SlotStatus.AVAILABLE.getValue()));
+
         }
-        return null;
+        throw new FailAddSlotException();
     }
 
     @Override
     public List<Slot> getSlotsByDate(GetSlotsByDateRequest request) throws SlotsNotFoundException {
-        return Arrays.asList(new Slot());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK);
+
+        if(format.format(request.getDate()).equals("2019-12-05 10:00:00")){
+            throw new SlotsNotFoundException();
+        }
+
+        Calendar instance = Calendar.getInstance();
+        instance.setTime(request.getDate());
+        instance.add(Calendar.HOUR_OF_DAY, 1);
+        return Arrays.asList(new Slot(request.getDate(), instance.getTime(), 1, SlotStatus.AVAILABLE.getValue()));
     }
 
     @Override
     public List<Slot> getSlotsByDateAndUser(GetSlotsByDateAndUserRequest request) throws SlotsNotFoundException {
-        return Arrays.asList(new Slot());
+        if(request.getUserId() == 2){
+            throw new SlotsNotFoundException();
+        }
+
+        Calendar instance = Calendar.getInstance();
+        instance.setTime(request.getDate());
+        instance.add(Calendar.HOUR_OF_DAY, 1);
+        return Arrays.asList(new Slot(request.getDate(), instance.getTime(), request.getUserId(), SlotStatus.AVAILABLE.getValue()));
     }
 
     @Override
-    public Slot updateSlotStatus(int slotId, int candidateId, SlotStatus status) {
-        return new Slot();
+    public Slot updateSlotStatus(int slotId, int candidateId, SlotStatus status) throws SlotsNotFoundException {
+        if(slotId != 1){
+            throw new SlotsNotFoundException();
+        }
+        Slot slot = new Slot();
+        slot.setCandidateId(candidateId);
+        slot.setStatus(status);
+        return slot;
     }
 
     @Override
-    public Slot deleteSlot(int slotId) {
+    public Slot deleteSlot(int slotId) throws SlotsNotFoundException {
+
+        if(slotId != 1){
+            throw new SlotsNotFoundException();
+        }
         return new Slot();
     }
 }
