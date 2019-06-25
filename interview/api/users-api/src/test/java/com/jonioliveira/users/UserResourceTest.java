@@ -18,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.with;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 
 @QuarkusTest
 @QuarkusTestResource(H2DatabaseTestResource.class)
@@ -34,7 +34,9 @@ public class UserResourceTest {
         .contentType(MediaType.APPLICATION_JSON)
           .when().post("/v1/user")
           .then()
-             .statusCode(201).body(is("{\"id\":1,\"name\":\"user1\",\"type\":1}"));
+             .statusCode(201)
+                .body("name", equalTo("user1"))
+                .body("type", equalTo(1));
     }
 
     @Test
