@@ -33,8 +33,8 @@ Developed in Android(Java), using MVVM architecture and with components:
 Boilerplate of project based on: [https://github.com/MindorksOpenSource/android-mvvm-architecture](https://github.com/MindorksOpenSource/android-mvvm-architecture)
 
 **NOTES**: 
-  1 - Tests: The Android application hasn't tests, it's something that I have no experience with tests in Android, I'm creating tests only in the current project and don't feel confident to add tests to the application.
-  2 - Choose of Java instead Kotlin: Kotlin is the new lang that become the Google peferred lang, once more, in my current job I'm using Kotlin but still feel more confident with Java.
+  1. Tests: The Android application hasn't tests, it's something that I have no experience with tests in Android, I'm creating tests only in the current project and don't feel confident to add tests to the application.
+  2. Choose of Java instead Kotlin: Kotlin is the new lang that become the Google peferred lang, once more, in my current job I'm using Kotlin but still feel more confident with Java.
 
 #### Start
 
@@ -76,9 +76,9 @@ It could use all the same database, but for the complete approach of microservic
 API have Dockerfiles to build images to run in prod mode
 
 **NOTES**:
-  1 - Usage of Quarkus: Quarkus is a new framework developed by Red Hat, that use among other Eclipse Microprofile.io, and something that I prefer to use in my personal projects because is simple to start with, fast and are becoming popular in the community.
-  2 - Start with Maven and not Docker: A feature of the Quarkus is it's hot reloading, and swagger for documentation and it's only available in dev mode.
-  3 - Differences in testing of microservices: User service use a H2 Database for testing while Interview use Mocks, the choice was because I need to mock the REST Client and Quarkus don't support H2 and mock at same time, yet.
+  1. Usage of Quarkus: Quarkus is a new framework developed by Red Hat, that use among other Eclipse Microprofile.io, and something that I prefer to use in my personal projects because is simple to start with, fast and are becoming popular in the community.
+  2. Start with Maven and not Docker: A feature of the Quarkus is it's hot reloading, and swagger for documentation and it's only available in dev mode.
+  3. Differences in testing of microservices: User service use a H2 Database for testing while Interview use Mocks, the choice was because I need to mock the REST Client and Quarkus don't support H2 and mock at same time, yet.
 
 #### Usage
 
